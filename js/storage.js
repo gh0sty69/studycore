@@ -2,7 +2,7 @@
 const Storage = (() => {
     const USERS_KEY = 'sc_users';
     const CURRENT_KEY = 'sc_current_user';
-    const OWNER_USERNAME = 'gh0sty69';
+    const OWNER_USERNAME = 'ghosty';
 
     function getUsers() { return JSON.parse(localStorage.getItem(USERS_KEY) || '{}'); }
     function saveUsers(users) { localStorage.setItem(USERS_KEY, JSON.stringify(users)); }

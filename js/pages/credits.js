@@ -1,11 +1,11 @@
 /* Credits Page */
 const CreditsPage = (() => {
-    function render() {
-        return `<div class="page-enter">
+  function render() {
+    return `<div class="page-enter">
       <div class="page-header"><h1>${I18n.t('creditsTitle')}</h1><p>${I18n.t('creditsSubtitle')}</p></div>
       <div class="card credits-card">
         <div class="credits-avatar">👻</div>
-        <div class="credits-name">gh0sty69</div>
+        <div class="credits-name">ghosty</div>
         <div class="credits-role">${I18n.t('developedBy')} & Creator</div>
         <div class="owner-badge mt-2" style="display:inline-flex">👑 ${I18n.t('owner')}</div>
         <p class="mt-3 text-muted" style="max-width:500px;margin-left:auto;margin-right:auto">${I18n.t('creditsDesc')}</p>
@@ -20,6 +20,6 @@ const CreditsPage = (() => {
         <p class="text-muted mt-2" style="font-size:0.85rem">No frameworks. No dependencies. Just clean code. ✨</p>
       </div>
     </div>`;
-    }
-    return { render };
+  }
+  return { render };
 })();
