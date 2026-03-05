@@ -1646,6 +1646,44 @@ img {
   text-transform: uppercase;
   letter-spacing: 0.05em;
   box-shadow: 0 0 12px var(--accent-glow);
+  animation: badgePulse 2s ease-in-out infinite;
+}
+
+@keyframes badgePulse {
+
+  0%,
+  100% {
+    box-shadow: 0 0 12px var(--accent-glow);
+  }
+
+  50% {
+    box-shadow: 0 0 24px var(--accent-glow), 0 0 40px rgba(155, 109, 255, 0.2);
+  }
+}
+
+/* --- Animated Owner Name --- */
+.owner-name {
+  font-weight: 800;
+  background: linear-gradient(270deg, #6c5ce7, #00cec9, #fdcb6e, #ff6b6b, #6c5ce7);
+  background-size: 400% 400%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: ownerGradient 4s ease infinite;
+}
+
+@keyframes ownerGradient {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 /* --- Study Games --- */

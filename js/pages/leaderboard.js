@@ -22,7 +22,7 @@ const LeaderboardPage = (() => {
     function renderList(lb, currentUser) {
         const sorted = [...lb].sort((a, b) => activeTab === 'weekly' ? b.weeklyStreak - a.weeklyStreak : b.streak - a.streak);
         if (sorted.length === 0) {
-            return `<div class="history-empty" style="padding:2rem;text-align:center;color:var(--text-muted)">No users yet. Start studying to appear on the leaderboard!</div>`;
+            return '<div class="history-empty" style="padding:2rem;text-align:center;color:var(--text-muted)">No users yet. Sign up and start studying!</div>';
         }
         return sorted.map((entry, i) => {
             const rank = i + 1;
@@ -31,11 +31,13 @@ const LeaderboardPage = (() => {
             const streakVal = activeTab === 'weekly' ? entry.weeklyStreak : entry.streak;
             const isOwner = Storage.isOwner(entry.username);
             const ownerBadge = isOwner ? ` <span class="owner-badge">👑 ${I18n.t('owner')}</span>` : '';
+            const nameClass = isOwner ? 'lb-name owner-name' : 'lb-name';
             const youTag = entry.username === currentUser ? ' (you)' : '';
+            const avatar = isOwner ? '👻' : (entry.avatar || '👤');
             return `<div class="leaderboard-row${topClass}${currentClass}">
         <div class="lb-rank">${rank <= 3 ? ['🥇', '🥈', '🥉'][rank - 1] : rank}</div>
-        <div class="lb-avatar">${entry.avatar || '👤'}</div>
-        <div class="lb-name">${entry.username}${youTag}${ownerBadge}</div>
+        <div class="lb-avatar">${avatar}</div>
+        <div class="${nameClass}">${entry.username}${youTag}${ownerBadge}</div>
         <div class="lb-streak">🔥 ${streakVal} ${I18n.t('days')}</div>
       </div>`;
         }).join('');

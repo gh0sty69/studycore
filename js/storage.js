@@ -31,25 +31,37 @@ const Storage = (() => {
     }
     function isOwner(username) { return username === OWNER_USERNAME; }
 
-    // Leaderboard: only real registered users
+    // Leaderboard: ONLY real registered users, no fake/demo data ever
     function initDemoLeaderboard() {
-        // No demo users; leaderboard starts empty and populates from real signups
-        if (!localStorage.getItem('sc_leaderboard')) {
-            localStorage.setItem('sc_leaderboard', JSON.stringify([]));
-        }
+        // Always rebuild leaderboard from actual registered users
+        rebuildLeaderboard();
     }
-    function getLeaderboard() { return JSON.parse(localStorage.getItem('sc_leaderboard') || '[]'); }
-    function updateLeaderboard(username, streak) {
-        const lb = getLeaderboard();
-        const idx = lb.findIndex(e => e.username === username);
-        if (idx >= 0) {
-            lb[idx].streak = streak;
-            lb[idx].weeklyStreak = Math.min(streak, 7);
-        } else {
-            lb.push({ username, streak, weeklyStreak: Math.min(streak, 7), avatar: '👤' });
-        }
+
+    function rebuildLeaderboard() {
+        const users = getUsers();
+        const lb = [];
+        Object.keys(users).forEach(username => {
+            const data = users[username].data || getDefaultData();
+            lb.push({
+                username,
+                streak: data.streak || 0,
+                weeklyStreak: Math.min(data.streak || 0, 7),
+                avatar: isOwner(username) ? '👻' : '👤'
+            });
+        });
         lb.sort((a, b) => b.streak - a.streak);
         localStorage.setItem('sc_leaderboard', JSON.stringify(lb));
     }
-    return { getUsers, saveUsers, getCurrentUsername, setCurrentUser, clearCurrentUser, getUserData, saveUserData, getDefaultData, isOwner, OWNER_USERNAME, initDemoLeaderboard, getLeaderboard, updateLeaderboard };
+
+    function getLeaderboard() {
+        // Always rebuild from real users to ensure no fake data
+        rebuildLeaderboard();
+        return JSON.parse(localStorage.getItem('sc_leaderboard') || '[]');
+    }
+
+    function updateLeaderboard(username, streak) {
+        rebuildLeaderboard();
+    }
+
+    return { getUsers, saveUsers, getCurrentUsername, setCurrentUser, clearCurrentUser, getUserData, saveUserData, getDefaultData, isOwner, OWNER_USERNAME, initDemoLeaderboard, getLeaderboard, updateLeaderboard, rebuildLeaderboard };
 })();
