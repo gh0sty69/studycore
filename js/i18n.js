@@ -20,7 +20,13 @@ const I18n = (() => {
       gamesTitle: 'Study Games', gamesSubtitle: 'Learn through fun interactive games.', wordScramble: 'Word Scramble', wordScrambleDesc: 'Unscramble study-related words', memoryMatch: 'Memory Match', memoryMatchDesc: 'Match pairs of study concepts', typeAnswer: 'Type your answer...', checkAnswer: 'Check', correct: 'Correct! 🎉', incorrect: 'Try again!', nextWord: 'Next Word', newGame: 'New Game', matchComplete: 'All pairs matched!', gamesPlayed: 'Games Played',
       creditsTitle: 'Credits', creditsSubtitle: 'The people behind StudyCore.', developedBy: 'Developed by', creditsDesc: 'StudyCore was designed and developed with ❤️ as a modern study platform to help students learn more effectively.',
       patchNotesTitle: 'Patch Notes', patchNotesSubtitle: 'See what\'s new in StudyCore.',
-      settingsTitle: 'Settings', settingsSubtitle: 'Customize your StudyCore experience.', language: 'Language', profile: 'Profile', dataManagement: 'Data Management', clearAllData: 'Clear All Data', clearDataConfirm: 'Are you sure? This will delete all your progress.', dangerZone: 'Danger Zone'
+      settingsTitle: 'Settings', settingsSubtitle: 'Customize your StudyCore experience.', language: 'Language', profile: 'Profile', dataManagement: 'Data Management', clearAllData: 'Clear All Data', clearDataConfirm: 'Are you sure? This will delete all your progress.', dangerZone: 'Danger Zone',
+      sAppearance: 'Appearance', sTheme: 'Theme', sThemeDefault: 'Default Dark', sThemeMidnight: 'Midnight', sThemeAmoled: 'AMOLED Black', sFontSize: 'Font Size', sFontSmall: 'Small', sFontMedium: 'Medium', sFontLarge: 'Large', sAnimations: 'Animations',
+      sTimerSettings: 'Timer Settings', sFocusDuration: 'Focus Duration', sBreakDuration: 'Break Duration', sTimerSound: 'Timer Sound',
+      sNotifications: 'Notifications', sXPPopups: 'XP Popups', sAchievementPopups: 'Achievement Popups', sStreakReminder: 'Streak Reminder',
+      sExportData: 'Export Data', sExport: 'Download JSON', sImportData: 'Import Data', sImport: 'Upload JSON', sResetStreak: 'Reset Streak', sReset: 'Reset', sResetConfirm: 'Are you sure? This will reset your streak to 0.',
+      sDeleteAccount: 'Delete Account', sDelete: 'Delete', sDeleteConfirm: 'Are you sure? This will permanently delete your account and all data.',
+      sMadeWith: 'Made with ❤️ by'
     }, sv: {
       authTagline: 'AI-Driven Studieassistent', loginTitle: 'Logga In', signupTitle: 'Skapa Konto', username: 'Användarnamn', password: 'Lösenord', confirmPassword: 'Bekräfta Lösenord', loginBtn: 'Logga In', signupBtn: 'Skapa Konto', noAccount: 'Har du inget konto?', signUpLink: 'Registrera dig', haveAccount: 'Har du redan ett konto?', loginLink: 'Logga In', loginError: 'Ogiltigt användarnamn eller lösenord', signupErrorMatch: 'Lösenorden matchar inte', signupErrorExists: 'Användarnamnet finns redan', signupErrorShort: 'Lösenordet måste vara minst 4 tecken',
       navDashboard: 'Instrumentpanel', navSummarizer: 'Sammanfatta Anteckningar', navQuiz: 'Skapa Quiz', navFlashcards: 'Flashkort', navTimer: 'Studietimer', navProgress: 'Framsteg', navHistory: 'Studiehistorik', navLeaderboard: 'Topplista', navAchievements: 'Utmärkelser', navSettings: 'Inställningar', navGames: 'Studiespel', navPatchNotes: 'Uppdateringar', navCredits: 'Tack', logout: 'Logga Ut',
@@ -39,7 +45,13 @@ const I18n = (() => {
       gamesTitle: 'Studiespel', gamesSubtitle: 'Lär dig genom roliga interaktiva spel.', wordScramble: 'Ordpussel', wordScrambleDesc: 'Blanda om studierelaterade ord', memoryMatch: 'Minnespar', memoryMatchDesc: 'Matcha par av studiebegrepp', typeAnswer: 'Skriv ditt svar...', checkAnswer: 'Kontrollera', correct: 'Rätt! 🎉', incorrect: 'Försök igen!', nextWord: 'Nästa Ord', newGame: 'Nytt Spel', matchComplete: 'Alla par matchade!', gamesPlayed: 'Spel Spelade',
       creditsTitle: 'Tack', creditsSubtitle: 'Personerna bakom StudyCore.', developedBy: 'Utvecklad av', creditsDesc: 'StudyCore designades och utvecklades med ❤️ som en modern studieplattform för att hjälpa studenter att lära sig mer effektivt.',
       patchNotesTitle: 'Uppdateringar', patchNotesSubtitle: 'Se vad som är nytt i StudyCore.',
-      settingsTitle: 'Inställningar', settingsSubtitle: 'Anpassa din StudyCore-upplevelse.', language: 'Språk', profile: 'Profil', dataManagement: 'Datahantering', clearAllData: 'Radera All Data', clearDataConfirm: 'Är du säker? Detta raderar alla dina framsteg.', dangerZone: 'Farozon'
+      settingsTitle: 'Inställningar', settingsSubtitle: 'Anpassa din StudyCore-upplevelse.', language: 'Språk', profile: 'Profil', dataManagement: 'Datahantering', clearAllData: 'Radera All Data', clearDataConfirm: 'Är du säker? Detta raderar alla dina framsteg.', dangerZone: 'Farozon',
+      sAppearance: 'Utseende', sTheme: 'Tema', sThemeDefault: 'Standard Mörk', sThemeMidnight: 'Midnatt', sThemeAmoled: 'AMOLED Svart', sFontSize: 'Textstorlek', sFontSmall: 'Liten', sFontMedium: 'Medel', sFontLarge: 'Stor', sAnimations: 'Animeringar',
+      sTimerSettings: 'Timerinställningar', sFocusDuration: 'Fokustid', sBreakDuration: 'Paustid', sTimerSound: 'Timerljud',
+      sNotifications: 'Aviseringar', sXPPopups: 'XP-popup', sAchievementPopups: 'Utmärkelsepopup', sStreakReminder: 'Svitpåminnelse',
+      sExportData: 'Exportera Data', sExport: 'Ladda ner JSON', sImportData: 'Importera Data', sImport: 'Ladda upp JSON', sResetStreak: 'Återställ Svit', sReset: 'Återställ', sResetConfirm: 'Är du säker? Detta återställer din svit till 0.',
+      sDeleteAccount: 'Radera Konto', sDelete: 'Radera', sDeleteConfirm: 'Är du säker? Detta raderar permanent ditt konto och all data.',
+      sMadeWith: 'Gjord med ❤️ av'
     }
   };
 

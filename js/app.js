@@ -78,6 +78,7 @@ const App = (() => {
         document.getElementById('topbar-username').textContent = Auth.currentUser();
         I18n.updateDOM();
         Router.init();
+        SettingsPage.applyOnLoad();
     }
 
     function showAuth() {

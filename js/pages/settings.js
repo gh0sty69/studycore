@@ -1,50 +1,313 @@
-/* Settings Page */
+/* Settings Page — Comprehensive */
 const SettingsPage = (() => {
-    function render() {
-        const lang = I18n.getLang();
-        return `<div class="page-enter">
-      <div class="page-header"><h1>${I18n.t('settingsTitle')}</h1><p>${I18n.t('settingsSubtitle')}</p></div>
+  function render() {
+    const lang = I18n.getLang();
+    const username = Auth.currentUser();
+    const data = Storage.getUserData(username);
+    const isOwner = Storage.isOwner(username);
+    const settings = getUserSettings();
+
+    return `<div class="page-enter">
+      <div class="page-header"><h1>${t('settingsTitle')}</h1><p>${t('settingsSubtitle')}</p></div>
+
+      <!-- Profile -->
       <div class="card settings-section">
-        <h3>${I18n.t('profile')}</h3>
-        <div class="settings-row">
-          <label>${I18n.t('username')}</label>
-          <span style="font-weight:600">${Auth.currentUser()}</span>
-        </div>
+        <h3>👤 ${t('profile')}</h3>
+        <div class="settings-row"><label>${t('username')}</label><span style="font-weight:600">${username} ${isOwner ? '<span class="owner-badge">👑 OWNER</span>' : ''}</span></div>
+        <div class="settings-row"><label>${t('level')}</label><span style="font-weight:600">${t('level')} ${data.level || 1} — ${data.xp || 0} XP</span></div>
+        <div class="settings-row"><label>${t('currentStreak')}</label><span style="font-weight:600">🔥 ${data.streak || 0} ${t('days')}</span></div>
+        <div class="settings-row"><label>${t('achievementsUnlocked')}</label><span style="font-weight:600">🎖️ ${(data.achievements || []).length} / ${Gamification.ACHIEVEMENTS.length}</span></div>
+        <div class="settings-row"><label>${t('gamesPlayed')}</label><span style="font-weight:600">🎮 ${data.gamesPlayed || 0}</span></div>
       </div>
+
+      <!-- Language -->
       <div class="card settings-section">
-        <h3>${I18n.t('language')}</h3>
+        <h3>🌐 ${t('language')}</h3>
         <div class="settings-row">
-          <label>${I18n.t('language')}</label>
-          <select id="settings-lang" style="width:auto;padding:0.4rem 0.8rem;background:var(--bg-input);color:var(--text-primary);border:1px solid var(--border-color);border-radius:var(--radius-sm);font-family:var(--font)">
+          <label>${t('language')}</label>
+          <select id="settings-lang" class="settings-select">
             <option value="en" ${lang === 'en' ? 'selected' : ''}>English</option>
             <option value="sv" ${lang === 'sv' ? 'selected' : ''}>Svenska</option>
           </select>
         </div>
       </div>
+
+      <!-- Appearance -->
       <div class="card settings-section">
-        <h3>${I18n.t('dangerZone')}</h3>
+        <h3>🎨 ${t('sAppearance')}</h3>
         <div class="settings-row">
-          <label>${I18n.t('dataManagement')}</label>
-          <button class="btn btn-danger btn-sm" id="clear-data-btn">${I18n.t('clearAllData')}</button>
+          <label>${t('sTheme')}</label>
+          <select id="settings-theme" class="settings-select">
+            <option value="default" ${settings.theme === 'default' ? 'selected' : ''}>${t('sThemeDefault')}</option>
+            <option value="midnight" ${settings.theme === 'midnight' ? 'selected' : ''}>${t('sThemeMidnight')}</option>
+            <option value="amoled" ${settings.theme === 'amoled' ? 'selected' : ''}>${t('sThemeAmoled')}</option>
+          </select>
+        </div>
+        <div class="settings-row">
+          <label>${t('sFontSize')}</label>
+          <select id="settings-fontsize" class="settings-select">
+            <option value="small" ${settings.fontSize === 'small' ? 'selected' : ''}>${t('sFontSmall')}</option>
+            <option value="medium" ${settings.fontSize === 'medium' ? 'selected' : ''}>${t('sFontMedium')}</option>
+            <option value="large" ${settings.fontSize === 'large' ? 'selected' : ''}>${t('sFontLarge')}</option>
+          </select>
+        </div>
+        <div class="settings-row">
+          <label>${t('sAnimations')}</label>
+          <label class="toggle"><input type="checkbox" id="settings-animations" ${settings.animations ? 'checked' : ''}><span class="toggle-slider"></span></label>
         </div>
       </div>
+
+      <!-- Timer Settings -->
+      <div class="card settings-section">
+        <h3>⏱️ ${t('sTimerSettings')}</h3>
+        <div class="settings-row">
+          <label>${t('sFocusDuration')}</label>
+          <select id="settings-focus" class="settings-select">
+            <option value="15" ${settings.focusMin == 15 ? 'selected' : ''}>15 min</option>
+            <option value="25" ${settings.focusMin == 25 ? 'selected' : ''}>25 min</option>
+            <option value="30" ${settings.focusMin == 30 ? 'selected' : ''}>30 min</option>
+            <option value="45" ${settings.focusMin == 45 ? 'selected' : ''}>45 min</option>
+            <option value="60" ${settings.focusMin == 60 ? 'selected' : ''}>60 min</option>
+          </select>
+        </div>
+        <div class="settings-row">
+          <label>${t('sBreakDuration')}</label>
+          <select id="settings-break" class="settings-select">
+            <option value="3" ${settings.breakMin == 3 ? 'selected' : ''}>3 min</option>
+            <option value="5" ${settings.breakMin == 5 ? 'selected' : ''}>5 min</option>
+            <option value="10" ${settings.breakMin == 10 ? 'selected' : ''}>10 min</option>
+            <option value="15" ${settings.breakMin == 15 ? 'selected' : ''}>15 min</option>
+          </select>
+        </div>
+        <div class="settings-row">
+          <label>${t('sTimerSound')}</label>
+          <label class="toggle"><input type="checkbox" id="settings-timer-sound" ${settings.timerSound ? 'checked' : ''}><span class="toggle-slider"></span></label>
+        </div>
+      </div>
+
+      <!-- Notifications -->
+      <div class="card settings-section">
+        <h3>🔔 ${t('sNotifications')}</h3>
+        <div class="settings-row">
+          <label>${t('sXPPopups')}</label>
+          <label class="toggle"><input type="checkbox" id="settings-xp-popups" ${settings.xpPopups ? 'checked' : ''}><span class="toggle-slider"></span></label>
+        </div>
+        <div class="settings-row">
+          <label>${t('sAchievementPopups')}</label>
+          <label class="toggle"><input type="checkbox" id="settings-achieve-popups" ${settings.achievePopups ? 'checked' : ''}><span class="toggle-slider"></span></label>
+        </div>
+        <div class="settings-row">
+          <label>${t('sStreakReminder')}</label>
+          <label class="toggle"><input type="checkbox" id="settings-streak-reminder" ${settings.streakReminder ? 'checked' : ''}><span class="toggle-slider"></span></label>
+        </div>
+      </div>
+
+      <!-- Data Management -->
+      <div class="card settings-section">
+        <h3>💾 ${t('dataManagement')}</h3>
+        <div class="settings-row">
+          <label>${t('sExportData')}</label>
+          <button class="btn btn-secondary btn-sm" id="export-btn">${t('sExport')}</button>
+        </div>
+        <div class="settings-row">
+          <label>${t('sImportData')}</label>
+          <button class="btn btn-secondary btn-sm" id="import-btn">${t('sImport')}</button>
+          <input type="file" id="import-file" accept=".json" style="display:none">
+        </div>
+        <div class="settings-row">
+          <label>${t('sResetStreak')}</label>
+          <button class="btn btn-danger btn-sm" id="reset-streak-btn">${t('sReset')}</button>
+        </div>
+      </div>
+
+      <!-- Danger Zone -->
+      <div class="card settings-section" style="border-color:var(--danger)">
+        <h3>⚠️ ${t('dangerZone')}</h3>
+        <div class="settings-row">
+          <label>${t('clearAllData')}</label>
+          <button class="btn btn-danger btn-sm" id="clear-data-btn">${t('clearAllData')}</button>
+        </div>
+        <div class="settings-row">
+          <label>${t('sDeleteAccount')}</label>
+          <button class="btn btn-danger btn-sm" id="delete-account-btn">${t('sDelete')}</button>
+        </div>
+      </div>
+
+      <!-- App Info -->
+      <div class="card settings-section" style="text-align:center;color:var(--text-muted)">
+        <p style="font-size:0.85rem">StudyCore v2.1 — ${t('sMadeWith')} ghosty</p>
+        <p style="font-size:0.75rem;margin-top:0.25rem">© 2026 StudyCore. All rights reserved.</p>
+      </div>
     </div>`;
-    }
+  }
 
-    function init() {
-        document.getElementById('settings-lang')?.addEventListener('change', (e) => {
-            I18n.setLang(e.target.value);
-            // Re-render page to apply translations
-            if (typeof Router !== 'undefined') Router.navigate('settings');
-        });
-        document.getElementById('clear-data-btn')?.addEventListener('click', () => {
-            if (confirm(I18n.t('clearDataConfirm'))) {
-                const username = Auth.currentUser();
-                Storage.saveUserData(username, Storage.getDefaultData());
-                if (typeof Router !== 'undefined') Router.navigate('settings');
-            }
-        });
-    }
+  function t(key) { return I18n.t(key); }
 
-    return { render, init };
+  function getUserSettings() {
+    const raw = localStorage.getItem('sc_settings_' + Auth.currentUser());
+    const defaults = {
+      theme: 'default', fontSize: 'medium', animations: true,
+      focusMin: 25, breakMin: 5, timerSound: true,
+      xpPopups: true, achievePopups: true, streakReminder: true
+    };
+    if (!raw) return defaults;
+    try { return { ...defaults, ...JSON.parse(raw) }; } catch { return defaults; }
+  }
+
+  function saveSettings(settings) {
+    localStorage.setItem('sc_settings_' + Auth.currentUser(), JSON.stringify(settings));
+  }
+
+  function applyTheme(theme) {
+    const root = document.documentElement;
+    if (theme === 'midnight') {
+      root.style.setProperty('--bg-primary', '#05060a');
+      root.style.setProperty('--bg-secondary', '#0c0e16');
+      root.style.setProperty('--bg-card', '#10131e');
+      root.style.setProperty('--bg-card-hover', '#181c2e');
+    } else if (theme === 'amoled') {
+      root.style.setProperty('--bg-primary', '#000000');
+      root.style.setProperty('--bg-secondary', '#050505');
+      root.style.setProperty('--bg-card', '#0a0a0a');
+      root.style.setProperty('--bg-card-hover', '#141414');
+    } else {
+      root.style.setProperty('--bg-primary', '#0f1117');
+      root.style.setProperty('--bg-secondary', '#1a1d27');
+      root.style.setProperty('--bg-card', '#1e2130');
+      root.style.setProperty('--bg-card-hover', '#252840');
+    }
+  }
+
+  function applyFontSize(size) {
+    const root = document.documentElement;
+    if (size === 'small') root.style.fontSize = '14px';
+    else if (size === 'large') root.style.fontSize = '18px';
+    else root.style.fontSize = '16px';
+  }
+
+  function init() {
+    const settings = getUserSettings();
+    applyTheme(settings.theme);
+    applyFontSize(settings.fontSize);
+
+    // Language
+    document.getElementById('settings-lang')?.addEventListener('change', (e) => {
+      I18n.setLang(e.target.value);
+      const username = Auth.currentUser();
+      if (username) {
+        const data = Storage.getUserData(username);
+        data.langSwitches = (data.langSwitches || 0) + 1;
+        Storage.saveUserData(username, data);
+      }
+      Router.navigate('settings');
+    });
+
+    // Theme
+    document.getElementById('settings-theme')?.addEventListener('change', (e) => {
+      const s = getUserSettings(); s.theme = e.target.value; saveSettings(s); applyTheme(s.theme);
+    });
+
+    // Font size
+    document.getElementById('settings-fontsize')?.addEventListener('change', (e) => {
+      const s = getUserSettings(); s.fontSize = e.target.value; saveSettings(s); applyFontSize(s.fontSize);
+    });
+
+    // Animations toggle
+    document.getElementById('settings-animations')?.addEventListener('change', (e) => {
+      const s = getUserSettings(); s.animations = e.target.checked; saveSettings(s);
+      document.body.style.setProperty('--transition-base', s.animations ? '0.25s ease' : '0s');
+      document.body.style.setProperty('--transition-fast', s.animations ? '0.15s ease' : '0s');
+    });
+
+    // Timer settings
+    document.getElementById('settings-focus')?.addEventListener('change', (e) => {
+      const s = getUserSettings(); s.focusMin = parseInt(e.target.value); saveSettings(s);
+    });
+    document.getElementById('settings-break')?.addEventListener('change', (e) => {
+      const s = getUserSettings(); s.breakMin = parseInt(e.target.value); saveSettings(s);
+    });
+    document.getElementById('settings-timer-sound')?.addEventListener('change', (e) => {
+      const s = getUserSettings(); s.timerSound = e.target.checked; saveSettings(s);
+    });
+
+    // Notification toggles
+    document.getElementById('settings-xp-popups')?.addEventListener('change', (e) => {
+      const s = getUserSettings(); s.xpPopups = e.target.checked; saveSettings(s);
+    });
+    document.getElementById('settings-achieve-popups')?.addEventListener('change', (e) => {
+      const s = getUserSettings(); s.achievePopups = e.target.checked; saveSettings(s);
+    });
+    document.getElementById('settings-streak-reminder')?.addEventListener('change', (e) => {
+      const s = getUserSettings(); s.streakReminder = e.target.checked; saveSettings(s);
+    });
+
+    // Export
+    document.getElementById('export-btn')?.addEventListener('click', () => {
+      const data = Storage.getUserData(Auth.currentUser());
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = `studycore_${Auth.currentUser()}_backup.json`;
+      a.click(); URL.revokeObjectURL(url);
+    });
+
+    // Import
+    document.getElementById('import-btn')?.addEventListener('click', () => {
+      document.getElementById('import-file')?.click();
+    });
+    document.getElementById('import-file')?.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        try {
+          const imported = JSON.parse(ev.target.result);
+          Storage.saveUserData(Auth.currentUser(), imported);
+          Router.navigate('settings');
+        } catch { alert('Invalid file format'); }
+      };
+      reader.readAsText(file);
+    });
+
+    // Reset streak
+    document.getElementById('reset-streak-btn')?.addEventListener('click', () => {
+      if (!confirm(I18n.t('sResetConfirm'))) return;
+      const data = Storage.getUserData(Auth.currentUser());
+      data.streak = 0; data.lastStudyDate = null;
+      Storage.saveUserData(Auth.currentUser(), data);
+      Router.navigate('settings');
+    });
+
+    // Clear all data
+    document.getElementById('clear-data-btn')?.addEventListener('click', () => {
+      if (!confirm(I18n.t('clearDataConfirm'))) return;
+      Storage.saveUserData(Auth.currentUser(), Storage.getDefaultData());
+      Router.navigate('settings');
+    });
+
+    // Delete account
+    document.getElementById('delete-account-btn')?.addEventListener('click', () => {
+      if (!confirm(I18n.t('sDeleteConfirm'))) return;
+      const users = Storage.getUsers();
+      delete users[Auth.currentUser()];
+      Storage.saveUsers(users);
+      Auth.logout();
+      location.reload();
+    });
+  }
+
+  // Apply saved settings on load
+  function applyOnLoad() {
+    const user = Auth.currentUser();
+    if (!user) return;
+    const settings = getUserSettings();
+    applyTheme(settings.theme);
+    applyFontSize(settings.fontSize);
+    if (!settings.animations) {
+      document.body.style.setProperty('--transition-base', '0s');
+      document.body.style.setProperty('--transition-fast', '0s');
+    }
+  }
+
+  return { render, init, applyOnLoad, getUserSettings };
 })();
