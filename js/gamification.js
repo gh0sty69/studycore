@@ -1,7 +1,7 @@
 /* Gamification — XP, Levels, Streaks, Achievements */
 const Gamification = (() => {
     const LEVEL_THRESHOLDS = [0, 100, 250, 500, 1000, 1750, 2750, 4000, 5500, 7500, 10000];
-    const XP_REWARDS = { summarize: 10, quiz: 20, flashcards: 10, timer: 25, streak: 15 };
+    const XP_REWARDS = { summarize: 10, quiz: 20, flashcards: 10, timer: 25, streak: 15, game: 15 };
 
     const ACHIEVEMENTS = [
         { id: 'first_steps', icon: '🌟', titleKey: 'badgeFirstSteps', descKey: 'badgeFirstStepsDesc', check: d => (d.notesSummarized + d.quizzesCompleted + d.flashcardsReviewed + d.timerSessions) >= 1 },
@@ -12,22 +12,25 @@ const Gamification = (() => {
         { id: 'legend', icon: '🔥', titleKey: 'badgeLegend', descKey: 'badgeLegendDesc', check: d => d.streak >= 30 },
         { id: 'scholar', icon: '📖', titleKey: 'badgeScholar', descKey: 'badgeScholarDesc', check: d => d.notesSummarized >= 20 },
         { id: 'time_lord', icon: '⏰', titleKey: 'badgeTimeLord', descKey: 'badgeTimeLordDesc', check: d => d.timerSessions >= 50 },
+        { id: 'night_owl', icon: '🦉', titleKey: 'badgeNightOwl', descKey: 'badgeNightOwlDesc', check: () => new Date().getHours() >= 0 && new Date().getHours() < 5 },
+        { id: 'speed_demon', icon: '⚡', titleKey: 'badgeSpeedDemon', descKey: 'badgeSpeedDemonDesc', check: d => d.quizzesCompleted >= 5 },
+        { id: 'socialite', icon: '🤝', titleKey: 'badgeSocialite', descKey: 'badgeSocialiteDesc', check: d => { const lb = Storage.getLeaderboard(); const idx = lb.findIndex(e => e.username === Auth.currentUser()); return idx >= 0 && idx < 3; } },
+        { id: 'gamer', icon: '🎮', titleKey: 'badgeGamer', descKey: 'badgeGamerDesc', check: d => (d.gamesPlayed || 0) >= 10 },
+        { id: 'marathon', icon: '🏃', titleKey: 'badgeMarathon', descKey: 'badgeMarathonDesc', check: d => d.studyMinutes >= 300 },
+        { id: 'perfect_score', icon: '💯', titleKey: 'badgePerfectScore', descKey: 'badgePerfectScoreDesc', check: d => (d.perfectQuizzes || 0) >= 1 },
+        { id: 'veteran', icon: '🎗️', titleKey: 'badgeVeteran', descKey: 'badgeVeteranDesc', check: d => d.streak >= 30 },
+        { id: 'polyglot', icon: '🌍', titleKey: 'badgePolyglot', descKey: 'badgePolyglotDesc', check: d => (d.langSwitches || 0) >= 5 },
     ];
 
     function getLevelForXP(xp) {
         let lvl = 1;
         for (let i = 1; i < LEVEL_THRESHOLDS.length; i++) {
-            if (xp >= LEVEL_THRESHOLDS[i]) lvl = i + 1;
-            else break;
+            if (xp >= LEVEL_THRESHOLDS[i]) lvl = i + 1; else break;
         }
         return lvl;
     }
-    function getXPForNextLevel(level) {
-        return LEVEL_THRESHOLDS[level] || LEVEL_THRESHOLDS[LEVEL_THRESHOLDS.length - 1];
-    }
-    function getXPForCurrentLevel(level) {
-        return LEVEL_THRESHOLDS[level - 1] || 0;
-    }
+    function getXPForNextLevel(level) { return LEVEL_THRESHOLDS[level] || LEVEL_THRESHOLDS[LEVEL_THRESHOLDS.length - 1]; }
+    function getXPForCurrentLevel(level) { return LEVEL_THRESHOLDS[level - 1] || 0; }
 
     function awardXP(type) {
         const username = Auth.currentUser();

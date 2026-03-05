@@ -49,10 +49,18 @@ const App = (() => {
             showAuth();
         });
 
-        // Lang toggle
+        // Lang toggle — also track switches for polyglot achievement
         document.getElementById('lang-btn')?.addEventListener('click', () => {
             const next = I18n.getLang() === 'en' ? 'sv' : 'en';
             I18n.setLang(next);
+            // Track language switches
+            const username = Auth.currentUser();
+            if (username) {
+                const data = Storage.getUserData(username);
+                data.langSwitches = (data.langSwitches || 0) + 1;
+                Storage.saveUserData(username, data);
+                Gamification.checkAchievements(data, username);
+            }
             Router.handleHash(); // Re-render current page
         });
 
@@ -78,7 +86,6 @@ const App = (() => {
         I18n.updateDOM();
     }
 
-    // Auto-init when DOM is ready
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', init);
     } else {

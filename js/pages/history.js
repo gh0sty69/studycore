@@ -1,7 +1,7 @@
 /* Study History Page */
 const HistoryPage = (() => {
-    const typeIcons = { summarize: '📝', quiz: '❓', flashcards: '🃏', timer: '⏱️' };
-    const typeBg = { summarize: 'var(--accent-soft)', quiz: 'var(--success-soft)', flashcards: 'var(--warning-soft)', timer: 'var(--danger-soft)' };
+    const typeIcons = { summarize: '📝', quiz: '❓', flashcards: '🃏', timer: '⏱️', game: '🎮' };
+    const typeBg = { summarize: 'var(--accent-soft)', quiz: 'var(--success-soft)', flashcards: 'var(--warning-soft)', timer: 'var(--danger-soft)', game: 'rgba(108,92,231,0.12)' };
 
     function render() {
         const data = Storage.getUserData(Auth.currentUser());

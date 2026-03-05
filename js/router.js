@@ -11,6 +11,9 @@ const Router = (() => {
         leaderboard: { render: () => LeaderboardPage.render(), init: () => LeaderboardPage.init() },
         achievements: { render: () => AchievementsPage.render(), init: null },
         settings: { render: () => SettingsPage.render(), init: () => SettingsPage.init() },
+        games: { render: () => GamesPage.render(), init: () => GamesPage.init() },
+        patchnotes: { render: () => PatchNotesPage.render(), init: null },
+        credits: { render: () => CreditsPage.render(), init: null },
     };
 
     function navigate(pageName) {
@@ -19,13 +22,9 @@ const Router = (() => {
         if (!container) return;
         container.innerHTML = page.render();
         if (page.init) page.init();
-
-        // Update active nav
         document.querySelectorAll('.nav-link').forEach(link => {
             link.classList.toggle('active', link.dataset.page === pageName);
         });
-
-        // Close mobile sidebar
         document.getElementById('sidebar')?.classList.remove('open');
     }
 
