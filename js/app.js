@@ -1,6 +1,6 @@
 /* App — Main Application Controller */
 const App = (() => {
-    const APP_VERSION = '2.3.0';
+    const APP_VERSION = '2.4.0';
 
     function init() {
         I18n.init();
