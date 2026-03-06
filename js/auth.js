@@ -34,53 +34,65 @@ const Auth = (() => {
 
     async function login(username, password) {
         const users = Storage.getUsers();
+        let cloudUser = null;
+        let cloudAuthOk = false;
+        let cloudChecked = false;
 
-        // Try Firebase first
+        // 1. Try Firebase Cloud Check
         if (window.FirebaseModule && FirebaseModule.isAvailable()) {
+            cloudChecked = true;
             try {
                 const db = FirebaseModule.getDB();
                 const snap = await db.ref('users/' + username).once('value');
                 if (snap.exists()) {
-                    const dbUser = snap.val();
-                    if (dbUser.password === hashPassword(password)) {
-                        const localUser = users[username];
-                        if (localUser) {
-                            const localXP = (localUser.data && localUser.data.xp) ? localUser.data.xp : 0;
-                            const cloudXP = (dbUser.data && dbUser.data.xp) ? dbUser.data.xp : 0;
-                            if (localXP > cloudXP) {
-                                await db.ref('users/' + username).set(localUser); // Overwrite cloud
-                            } else {
-                                users[username] = dbUser; // Sync cloud locally
-                                Storage.saveUsers(users);
-                            }
-                        } else {
-                            users[username] = dbUser; // New PC, pull from cloud
-                            Storage.saveUsers(users);
-                        }
-                        Storage.setCurrentUser(username);
-                        return { ok: true };
-                    } else {
-                        return { ok: false, error: 'loginError' };
+                    cloudUser = snap.val();
+                    if (cloudUser.password === hashPassword(password)) {
+                        cloudAuthOk = true;
                     }
                 }
             } catch (err) { console.error('Firebase login error:', err); }
         }
 
-        const user = users[username];
-        if (!user || user.password !== hashPassword(password)) {
-            return { ok: false, error: 'loginError' };
+        // 2. Local Fallback & Verification
+        const localUser = users[username];
+        const localAuthOk = localUser && localUser.password === hashPassword(password);
+
+        if (!cloudAuthOk && !localAuthOk) {
+            return { ok: false, error: 'loginError' }; // True failure
         }
 
-        // Push local user to Firebase if available and logging in locally
-        if (window.FirebaseModule && FirebaseModule.isAvailable()) {
-            try {
-                const db = FirebaseModule.getDB();
-                const snap = await db.ref('users/' + username).once('value');
-                if (!snap.exists()) {
-                    await db.ref('users/' + username).set(user);
+        // 3. Resolve State
+        if (cloudAuthOk && !localAuthOk) {
+            // New PC, pulling from Cloud
+            users[username] = cloudUser;
+            Storage.saveUsers(users);
+        } else if (!cloudAuthOk && localAuthOk) {
+            // Cloud password mismatched (hijacked) or cloud doesn't exist
+            // Since local is authentic, we should forcefully claim the cloud
+            if (cloudChecked) {
+                try {
+                    const db = FirebaseModule.getDB();
+                    await db.ref('users/' + username).set(localUser);
+                } catch (e) { }
+            }
+        } else if (cloudAuthOk && localAuthOk) {
+            // Both matched, compare XP to settle ties
+            const localXP = (localUser.data && localUser.data.xp) ? localUser.data.xp : 0;
+            const cloudXP = (cloudUser.data && cloudUser.data.xp) ? cloudUser.data.xp : 0;
+            if (localXP > cloudXP) {
+                if (cloudChecked) {
+                    try {
+                        const db = FirebaseModule.getDB();
+                        await db.ref('users/' + username).set(localUser);
+                    } catch (e) { }
                 }
-            } catch (err) { }
+            } else {
+                users[username] = cloudUser;
+                Storage.saveUsers(users);
+            }
         }
+
+
 
         Storage.setCurrentUser(username);
         return { ok: true };
