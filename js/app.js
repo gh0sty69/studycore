@@ -1,6 +1,6 @@
 /* App — Main Application Controller */
 const App = (() => {
-    const APP_VERSION = '2.2.0';
+    const APP_VERSION = '2.3.0';
 
     function init() {
         I18n.init();
@@ -79,6 +79,9 @@ const App = (() => {
             hideUpdateBanner();
         });
 
+        // Init Search (Ctrl+K)
+        Search.init();
+
         I18n.updateDOM();
     }
 
@@ -90,6 +93,12 @@ const App = (() => {
         Router.init();
         SettingsPage.applyOnLoad();
         checkForUpdate();
+
+        // Onboarding tour for first-time users
+        const username = Auth.currentUser();
+        if (username && Onboarding.shouldShow(username)) {
+            setTimeout(() => Onboarding.show(), 800);
+        }
     }
 
     function showAuth() {
@@ -104,14 +113,9 @@ const App = (() => {
         if (!username) return;
         const key = 'sc_last_version_' + username;
         const lastVersion = localStorage.getItem(key);
-
         if (lastVersion && lastVersion !== APP_VERSION) {
-            // User has been away, show update notification
-            setTimeout(() => {
-                showUpdateBanner();
-            }, 1200); // delay so it feels natural after login
+            setTimeout(() => showUpdateBanner(), 1200);
         }
-        // Store current version
         localStorage.setItem(key, APP_VERSION);
     }
 

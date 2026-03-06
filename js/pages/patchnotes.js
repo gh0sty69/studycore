@@ -5,6 +5,17 @@ const PatchNotesPage = (() => {
       <div class="page-header"><h1>${I18n.t('patchNotesTitle')}</h1><p>${I18n.t('patchNotesSubtitle')}</p></div>
       <div class="patch-timeline">
         <div class="card patch-entry">
+          <div class="patch-version">v2.3.0 <span class="patch-date">— March 6, 2026</span></div>
+          <div><span class="patch-tag new">NEW</span> Search, Focus Mode & More</div>
+          <ul class="patch-list">
+            <li>🔍 Ctrl+K Search — instantly search notes, history, flashcards, and pages</li>
+            <li>🎯 Focus Mode — distraction-free timer that hides sidebar and navigation</li>
+            <li>📌 Saved Notes — save and organize summaries into folders</li>
+            <li>👋 Onboarding Tour — 9-step walkthrough for first-time users</li>
+            <li>🔑 Password Change — update your password from settings</li>
+          </ul>
+        </div>
+        <div class="card patch-entry">
           <div class="patch-version">v2.2.0 <span class="patch-date">— March 6, 2026</span></div>
           <div><span class="patch-tag new">NEW</span> More Games & Update Notifications</div>
           <ul class="patch-list">

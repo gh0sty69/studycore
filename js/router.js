@@ -12,6 +12,7 @@ const Router = (() => {
         achievements: { render: () => AchievementsPage.render(), init: null },
         settings: { render: () => SettingsPage.render(), init: () => SettingsPage.init() },
         games: { render: () => GamesPage.render(), init: () => GamesPage.init() },
+        notes: { render: () => NotesPage.render(), init: () => NotesPage.init() },
         patchnotes: { render: () => PatchNotesPage.render(), init: null },
         credits: { render: () => CreditsPage.render(), init: null },
     };

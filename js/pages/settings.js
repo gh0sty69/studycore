@@ -120,6 +120,16 @@ const SettingsPage = (() => {
         </div>
       </div>
 
+      <!-- Password Change -->
+      <div class="card settings-section">
+        <h3>🔑 ${t('sChangePassword')}</h3>
+        <div class="form-group"><label>${t('sCurrentPw')}</label><input type="password" id="pw-current" placeholder="••••"></div>
+        <div class="form-group"><label>${t('sNewPw')}</label><input type="password" id="pw-new" placeholder="••••"></div>
+        <div class="form-group"><label>${t('sConfirmPw')}</label><input type="password" id="pw-confirm" placeholder="••••"></div>
+        <button class="btn btn-primary btn-sm" id="change-pw-btn">${t('sChangePwBtn')}</button>
+        <p id="pw-result" class="mt-1" style="font-size:0.85rem;min-height:1.2rem"></p>
+      </div>
+
       <!-- Danger Zone -->
       <div class="card settings-section" style="border-color:var(--danger)">
         <h3>⚠️ ${t('dangerZone')}</h3>
@@ -135,7 +145,7 @@ const SettingsPage = (() => {
 
       <!-- App Info -->
       <div class="card settings-section" style="text-align:center;color:var(--text-muted)">
-        <p style="font-size:0.85rem">StudyCore v2.1 — ${t('sMadeWith')} ghosty</p>
+        <p style="font-size:0.85rem">StudyCore v2.3 — ${t('sMadeWith')} ghosty</p>
         <p style="font-size:0.75rem;margin-top:0.25rem">© 2026 StudyCore. All rights reserved.</p>
       </div>
     </div>`;
@@ -293,6 +303,35 @@ const SettingsPage = (() => {
       Storage.saveUsers(users);
       Auth.logout();
       location.reload();
+    });
+
+    // Password change
+    document.getElementById('change-pw-btn')?.addEventListener('click', () => {
+      const current = document.getElementById('pw-current')?.value;
+      const newPw = document.getElementById('pw-new')?.value;
+      const confirm = document.getElementById('pw-confirm')?.value;
+      const resultEl = document.getElementById('pw-result');
+      const username = Auth.currentUser();
+      const users = Storage.getUsers();
+
+      if (!current || !newPw || !confirm) {
+        resultEl.textContent = I18n.t('sAllFieldsRequired'); resultEl.style.color = 'var(--danger)'; return;
+      }
+      if (users[username]?.password !== btoa(current)) {
+        resultEl.textContent = I18n.t('sWrongPassword'); resultEl.style.color = 'var(--danger)'; return;
+      }
+      if (newPw.length < 4) {
+        resultEl.textContent = I18n.t('signupErrorShort'); resultEl.style.color = 'var(--danger)'; return;
+      }
+      if (newPw !== confirm) {
+        resultEl.textContent = I18n.t('signupErrorMatch'); resultEl.style.color = 'var(--danger)'; return;
+      }
+      users[username].password = btoa(newPw);
+      Storage.saveUsers(users);
+      resultEl.textContent = I18n.t('sPwChanged'); resultEl.style.color = 'var(--success)';
+      document.getElementById('pw-current').value = '';
+      document.getElementById('pw-new').value = '';
+      document.getElementById('pw-confirm').value = '';
     });
   }
 
