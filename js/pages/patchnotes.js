@@ -5,6 +5,13 @@ const PatchNotesPage = (() => {
       <div class="page-header"><h1>${I18n.t('patchNotesTitle')}</h1><p>${I18n.t('patchNotesSubtitle')}</p></div>
       <div class="patch-timeline">
         <div class="card patch-entry">
+          <div class="patch-version">v2.7.2 <span class="patch-date">— March 6, 2026</span></div>
+          <div><span class="patch-tag new">NEW</span> Offline Sync Guide</div>
+          <ul class="patch-list">
+            <li>📖 Added a built-in Offline Sync guide in Settings to assist users stuck behind strict school/corporate Wi-Fi firewalls blocking cloud connectivity.</li>
+          </ul>
+        </div>
+        <div class="card patch-entry">
           <div class="patch-version">v2.7.0 <span class="patch-date">— March 6, 2026</span></div>
           <div><span class="patch-tag new">NEW</span> Nuclear Cloud Override Login & Diagnostics</div>
           <ul class="patch-list">

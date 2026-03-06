@@ -136,6 +136,10 @@ const SettingsPage = (() => {
           <label>Force Cloud Sync <small style="display:block;color:var(--text-muted);font-weight:normal;">Overrides cloud data with local data</small></label>
           <button class="btn btn-primary btn-sm" id="force-sync-btn">Force Sync</button>
         </div>
+        <div class="settings-row" style="margin-top:0.5rem; border-top:1px solid var(--border); padding-top:0.75rem;">
+          <label>Blocked by School Wi-Fi? <small style="display:block;color:var(--text-muted);font-weight:normal;">Learn how to bypass firewalls</small></label>
+          <button class="btn btn-secondary btn-sm" id="offline-guide-btn">Offline Sync Guide</button>
+        </div>
       </div>
 
       <!-- Password Change -->
@@ -388,6 +392,17 @@ const SettingsPage = (() => {
         btn.style.backgroundColor = '';
         btn.style.color = '';
       }, 3000);
+    });
+
+    // Offline Guide Modal
+    document.getElementById('offline-guide-btn')?.addEventListener('click', () => {
+      document.getElementById('offline-guide-modal').classList.remove('hidden');
+    });
+    document.getElementById('close-offline-guide')?.addEventListener('click', () => {
+      document.getElementById('offline-guide-modal').classList.add('hidden');
+    });
+    document.getElementById('understood-offline-guide')?.addEventListener('click', () => {
+      document.getElementById('offline-guide-modal').classList.add('hidden');
     });
 
     // Password change

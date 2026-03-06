@@ -208,6 +208,31 @@
     <!-- Onboarding Tour -->
     <div id="tour-overlay" class="tour-overlay hidden"></div>
 
+    <!-- Offline Sync Guide Modal -->
+    <div id="offline-guide-modal" class="tour-overlay hidden"
+        style="z-index: 10000; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.8);">
+        <div class="card" style="max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto; position: relative;">
+            <button id="close-offline-guide" class="btn btn-secondary btn-sm"
+                style="position: absolute; top: 1rem; right: 1rem;">✕</button>
+            <h2 style="margin-top: 0; color: var(--primary);">Offline Sync Guide</h2>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">
+                Some school or corporate Wi-Fi firewalls strictly block the Firebase Cloud Connection. If your app says
+                <b>"No Cloud Configured"</b> or fails to sync data automatically, use this manual USB method to bypass
+                the firewall:
+            </p>
+            <ol style="margin-left: 1.2rem; margin-bottom: 1.5rem; line-height: 1.6;">
+                <li>On your <b>Home PC</b>, go to Settings -> Data Management, and click exactly <b>Download JSON</b>.
+                </li>
+                <li>Save that <code>.json</code> file to a USB flash drive (or email it to yourself).</li>
+                <li>Go to your <b>School PC</b>. Create a brand new account (any name works).</li>
+                <li>Open Settings -> Data Management, and click exactly <b>Upload JSON</b>.</li>
+                <li>Select the file from your USB drive. Your Home PC data will instantly overwrite the dummy account,
+                    fully offline!</li>
+            </ol>
+            <button id="understood-offline-guide" class="btn btn-primary btn-full">I Understand</button>
+        </div>
+    </div>
+
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
