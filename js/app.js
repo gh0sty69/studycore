@@ -8,6 +8,7 @@ const App = (() => {
 
         if (Auth.isLoggedIn()) {
             showApp();
+            Auth.syncLocalAccount();
         } else {
             showAuth();
         }
