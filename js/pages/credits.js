@@ -17,7 +17,7 @@ const CreditsPage = (() => {
       <div class="card mt-2" style="text-align:center;padding:1.5rem">
         <h3 style="margin-bottom:0.5rem">Built With</h3>
         <p class="text-muted" style="font-size:0.9rem">HTML5 · CSS3 · Vanilla JavaScript · Google Fonts (Inter)</p>
-        <p class="text-muted mt-2" style="font-size:0.85rem">No frameworks. No dependencies. Just clean code. ✨</p>
+
       </div>
     </div>`;
   }

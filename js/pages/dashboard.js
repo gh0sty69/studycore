@@ -1,14 +1,5 @@
 /* Dashboard Page */
 const DashboardPage = (() => {
-  const quotes = [
-    '"The secret of getting ahead is getting started." — Mark Twain',
-    '"Education is the most powerful weapon." — Nelson Mandela',
-    '"The beautiful thing about learning is that no one can take it away from you." — B.B. King',
-    '"Study hard what interests you in the most undisciplined, irreverent and original manner possible." — Richard Feynman',
-    '"The more that you read, the more things you will know." — Dr. Seuss',
-    '"An investment in knowledge pays the best interest." — Benjamin Franklin',
-    '"Live as if you were to die tomorrow. Learn as if you were to live forever." — Mahatma Gandhi',
-  ];
   function render() {
     const data = Storage.getUserData(Auth.currentUser());
     const level = Gamification.getLevelForXP(data.xp);
@@ -17,7 +8,7 @@ const DashboardPage = (() => {
     const xpInLevel = data.xp - currentLvlXP;
     const xpNeeded = nextLvlXP - currentLvlXP;
     const xpPct = xpNeeded > 0 ? Math.min((xpInLevel / xpNeeded) * 100, 100) : 100;
-    const quote = quotes[Math.floor(Math.random() * quotes.length)];
+
     const streakText = data.streak > 0 ? I18n.t('streakTitle', { n: data.streak }) : I18n.t('streakMsgZero');
     const streakSub = data.streak > 0 ? I18n.t('streakMsg') : '';
     return `<div class="page-enter">
@@ -33,7 +24,6 @@ const DashboardPage = (() => {
         </div>
         <div class="xp-bar-track"><div class="xp-bar-fill" style="width:${xpPct}%"></div></div>
       </div>
-      <div class="quote-card">${quote}</div>
       <div class="dashboard-grid">
         <div class="card stat-card"><div class="stat-icon purple">📊</div><div class="stat-info"><h3>${data.quizzesCompleted}</h3><p>${I18n.t('quizzesCompleted')}</p></div></div>
         <div class="card stat-card"><div class="stat-icon green">🃏</div><div class="stat-info"><h3>${data.flashcardsReviewed}</h3><p>${I18n.t('flashcardsReviewed')}</p></div></div>
