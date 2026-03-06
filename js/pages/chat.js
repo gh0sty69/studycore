@@ -47,25 +47,42 @@ const ChatPage = (() => {
         });
         document.getElementById('chat-input')?.focus();
 
+        // Always render local cached messages immediately so the screen isn't blank
+        renderMessages(getLocalMessages());
+
         if (FirebaseModule.isAvailable()) {
-            // Firebase real-time listener
+            // Firebase real-time listener (will cleanly overwrite local messages once connected)
             const db = FirebaseModule.getDB();
             const chatRef = db.ref('chat').orderByChild('time').limitToLast(MAX_MESSAGES);
+
+            // Timeout to fallback if firewall blocks connection completely
+            let connected = false;
+            setTimeout(() => {
+                if (!connected) setupOfflinePolling();
+            }, 3000);
+
             firebaseListener = chatRef.on('value', (snapshot) => {
+                connected = true;
                 const msgs = [];
                 snapshot.forEach(child => { msgs.push(child.val()); });
+
+                // Save authoritative cloud messages to local cache
+                saveLocalMessages(msgs);
                 renderMessages(msgs);
             });
         } else {
-            // localStorage fallback
-            renderMessages(getLocalMessages());
-            lastCount = getLocalMessages().length;
-            pollInterval = setInterval(() => {
-                const msgs = getLocalMessages();
-                if (msgs.length !== lastCount) { lastCount = msgs.length; renderMessages(msgs); }
-            }, 1500);
-            window.addEventListener('storage', onStorageChange);
+            setupOfflinePolling();
         }
+    }
+
+    function setupOfflinePolling() {
+        if (pollInterval) return;
+        lastCount = getLocalMessages().length;
+        pollInterval = setInterval(() => {
+            const msgs = getLocalMessages();
+            if (msgs.length !== lastCount) { lastCount = msgs.length; renderMessages(msgs); }
+        }, 1500);
+        window.addEventListener('storage', onStorageChange);
     }
 
     function cleanup() {
@@ -94,15 +111,15 @@ const ChatPage = (() => {
             isOwner: Storage.isOwner(username)
         };
 
+        // 1. Optimistic UI: Immediately save & render locally so it pops up instantly
+        const msgs = getLocalMessages();
+        msgs.push(msg);
+        saveLocalMessages(msgs);
+        renderMessages(msgs);
+
+        // 2. Background Sync: Push to Firebase if configured
         if (FirebaseModule.isAvailable()) {
-            // Push to Firebase
-            FirebaseModule.getDB().ref('chat').push(msg);
-        } else {
-            // Save locally
-            const msgs = getLocalMessages();
-            msgs.push(msg);
-            saveLocalMessages(msgs);
-            renderMessages(getLocalMessages());
+            FirebaseModule.getDB().ref('chat').push(msg).catch(e => console.error('Silent chat push error:', e));
         }
 
         input.value = '';

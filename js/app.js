@@ -88,7 +88,7 @@ const App = (() => {
             if (!text) return;
 
             // ⚠️ USER: PASTE YOUR DISCORD WEBHOOK URL HERE ⚠️
-            const WEBHOOK_URL = 'YOUR_DISCORD_WEBHOOK_URL_HERE';
+            const WEBHOOK_URL = 'https://discord.com/api/webhooks/1479298418881855681/e7ZIycQqyPBXJetEbuIDOny16NcQ-H0SQoTc1szj0sQmk1krs8joe6G6atGRg-_NKM0S';
 
             const payload = {
                 content: `🚨 **New Bug Report** from user: \`${Auth.currentUser() || 'Unknown'}\`\n\n**Report:**\n> ${text}`
