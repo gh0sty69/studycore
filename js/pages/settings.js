@@ -159,7 +159,7 @@ const SettingsPage = (() => {
 
       <!-- App Info -->
       <div class="card settings-section" style="text-align:center;color:var(--text-muted)">
-        <p style="font-size:0.85rem">StudyCore v2.3 — ${t('sMadeWith')} StudyCore</p>
+        <p style="font-size:0.85rem">StudyCore v2.3 — ${t('sMadeWith')} ghosty</p>
         <p style="font-size:0.75rem;margin-top:0.25rem">© 2026 StudyCore. All rights reserved.</p>
       </div>
     </div>`;
