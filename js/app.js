@@ -94,14 +94,17 @@ const App = (() => {
                 content: `🚨 **New Bug Report** from user: \`${Auth.currentUser() || 'Unknown'}\`\n\n**Report:**\n> ${text}`
             };
 
+            // Bypass CORS Preflight by using FormData instead of application/json
+            const formData = new FormData();
+            formData.append('payload_json', JSON.stringify(payload));
+
             statusEl.textContent = 'Sending...';
             statusEl.style.color = 'var(--text-main)';
 
             try {
                 const response = await fetch(WEBHOOK_URL, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
+                    body: formData
                 });
 
                 if (response.ok) {
@@ -110,14 +113,14 @@ const App = (() => {
                     textEl.value = '';
                     setTimeout(() => bugModal.classList.add('hidden'), 2000);
                 } else {
-                    const err = await response.text();
-                    console.error('Webhook error:', err);
-                    statusEl.textContent = 'Webhook URL not configured or invalid.';
+                    const errText = await response.text();
+                    console.error('Webhook API error:', response.status, errText);
+                    statusEl.textContent = `Discord Error (${response.status}): ${errText.substring(0, 50)}...`;
                     statusEl.style.color = 'var(--danger)';
                 }
             } catch (err) {
                 console.error('Fetch error:', err);
-                statusEl.textContent = 'Failed to send report. Network error.';
+                statusEl.textContent = `Network Error: ${err.message}`;
                 statusEl.style.color = 'var(--danger)';
             }
         });
