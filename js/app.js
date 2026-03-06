@@ -1,6 +1,6 @@
 /* App — Main Application Controller */
 const App = (() => {
-    const APP_VERSION = '2.7.0';
+    const APP_VERSION = '2.7.1';
 
     function init() {
         I18n.init();
@@ -26,7 +26,14 @@ const App = (() => {
 
             btn.innerHTML = orig; btn.disabled = false;
             if (result.ok) { showApp(); }
-            else { document.getElementById('login-error').textContent = I18n.t(result.error) || result.error; }
+            else {
+                const baseErr = I18n.t(result.error) || result.error;
+                let finalMsg = baseErr;
+                if (result.diagnostic) {
+                    finalMsg += `<br><br><span style="color:#f39c12;font-size:0.85rem"><b>Diagnostic:</b> ${result.diagnostic}</span>`;
+                }
+                document.getElementById('login-error').innerHTML = finalMsg;
+            }
         });
 
         document.getElementById('signup-form')?.addEventListener('submit', async (e) => {

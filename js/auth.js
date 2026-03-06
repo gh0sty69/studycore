@@ -34,32 +34,52 @@ const Auth = (() => {
 
     async function login(username, password) {
         const users = Storage.getUsers();
+        let cloudStatus = 'No Cloud Configured';
 
         // 1. NUCLEAR CLOUD OVERRIDE
         if (window.FirebaseModule && FirebaseModule.isAvailable()) {
             try {
                 const db = FirebaseModule.getDB();
-                const snap = await db.ref('users/' + username).once('value');
+                cloudStatus = 'Connected to Cloud, Checking Database...';
+
+                // Set a timeout to catch network blocks (like school firewalls)
+                const cloudPromise = db.ref('users/' + username).once('value');
+                const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 5000));
+
+                const snap = await Promise.race([cloudPromise, timeoutPromise]);
+
                 if (snap.exists()) {
                     const cloudUser = snap.val();
-                    // If the cloud password matches what the user typed...
                     if (cloudUser.password === hashPassword(password)) {
-                        // The Cloud is KING. Immediately overwrite whatever local data exists.
                         users[username] = cloudUser;
                         Storage.saveUsers(users);
                         Storage.setCurrentUser(username);
                         return { ok: true };
+                    } else {
+                        cloudStatus = 'Cloud reachable, but Cloud Password DOES NOT MATCH.';
                     }
-                    // If cloud exists but password fails, we fall through to local check.
+                } else {
+                    cloudStatus = 'Cloud reachable, but user not found in database.';
                 }
-            } catch (err) { console.error('Firebase login error:', err); }
+            } catch (err) {
+                if (err.message === 'timeout') {
+                    cloudStatus = 'Cloud connection timed out (Firewall blocked?).';
+                } else {
+                    cloudStatus = 'Cloud Error: ' + err.message;
+                }
+                console.error('Firebase login error:', err);
+            }
         }
 
         // 2. LOCAL FALLBACK
         const localUser = users[username];
         if (!localUser || localUser.password !== hashPassword(password)) {
-            // Local failed too. Total failure.
-            return { ok: false, error: 'loginError' };
+            // Local failed too. Total failure. Return diagnostics.
+            return {
+                ok: false,
+                error: 'loginError',
+                diagnostic: cloudStatus
+            };
         }
 
         // 3. LOCAL SUCCESS -> CLAIM CLOUD
