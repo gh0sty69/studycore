@@ -2,17 +2,17 @@
 const Storage = (() => {
     const USERS_KEY = 'sc_users';
     const CURRENT_KEY = 'sc_current_user';
-    const OWNER_USERNAME = 'StudyCore';
+    const OWNER_USERNAME = 'ghosty';
 
-    // Migrate old "ghosty" owner to "StudyCore"
+    // Migrate old "StudyCore" owner back to "ghosty"
     try {
         let _u = JSON.parse(localStorage.getItem(USERS_KEY) || '{}');
-        if (_u['ghosty']) {
-            _u['StudyCore'] = _u['ghosty'];
-            delete _u['ghosty'];
+        if (_u['StudyCore']) {
+            _u['ghosty'] = _u['StudyCore'];
+            delete _u['StudyCore'];
             localStorage.setItem(USERS_KEY, JSON.stringify(_u));
-            if (localStorage.getItem(CURRENT_KEY) === 'ghosty') {
-                localStorage.setItem(CURRENT_KEY, 'StudyCore');
+            if (localStorage.getItem(CURRENT_KEY) === 'StudyCore') {
+                localStorage.setItem(CURRENT_KEY, 'ghosty');
             }
         }
     } catch (e) { }

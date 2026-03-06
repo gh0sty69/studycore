@@ -5,6 +5,16 @@ const PatchNotesPage = (() => {
       <div class="page-header"><h1>${I18n.t('patchNotesTitle')}</h1><p>${I18n.t('patchNotesSubtitle')}</p></div>
       <div class="patch-timeline">
         <div class="card patch-entry">
+          <div class="patch-version">v2.5.0 <span class="patch-date">— March 6, 2026</span></div>
+          <div><span class="patch-tag new">NEW</span> AI Automation, Firebase Cloud & Ghosty Effects</div>
+          <ul class="patch-list">
+            <li>🤖 Automated AI — 100% free automated Gemini Pro AI without needing manual API keys</li>
+            <li>☁️ Firebase Cloud Sync — completely seamless login across home and school computers</li>
+            <li>🚀 Aggressive Cache Busting — ensures that the app instantly updates for all users</li>
+            <li>👻 Special Owner Effects — brand new insane CSS glowing/pulsing animations strictly for the creator's name ("ghosty")</li>
+          </ul>
+        </div>
+        <div class="card patch-entry">
           <div class="patch-version">v2.3.0 <span class="patch-date">— March 6, 2026</span></div>
           <div><span class="patch-tag new">NEW</span> Search, Focus Mode & More</div>
           <ul class="patch-list">

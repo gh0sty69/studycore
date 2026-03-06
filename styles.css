@@ -1663,15 +1663,21 @@ img {
   }
 }
 
-/* --- Animated Owner Name --- */
+/* --- Animated Owner Name (GHOSTY SPECIAL EFFECTS) --- */
 .owner-name {
-  font-weight: 800;
-  background: linear-gradient(270deg, #6c5ce7, #00cec9, #fdcb6e, #ff6b6b, #6c5ce7);
+  font-weight: 900;
+  background: linear-gradient(270deg, #ff00ff, #00ffff, #ffea00, #ff0055, #ff00ff);
   background-size: 400% 400%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  animation: ownerGradient 4s ease infinite;
+  display: inline-block;
+  animation:
+    ownerGradient 3s ease infinite,
+    ghostyPulse 1.5s ease-in-out infinite alternate,
+    ghostyFloat 3s ease-in-out infinite;
+  filter: drop-shadow(0 0 8px rgba(255, 0, 255, 0.6)) drop-shadow(0 0 15px rgba(0, 255, 255, 0.4));
+  letter-spacing: 1px;
 }
 
 @keyframes ownerGradient {
@@ -1685,6 +1691,32 @@ img {
 
   100% {
     background-position: 0% 50%;
+  }
+}
+
+@keyframes ghostyPulse {
+  0% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 5px rgba(255, 0, 255, 0.5)) hue-rotate(0deg);
+  }
+
+  100% {
+    transform: scale(1.1);
+    filter: drop-shadow(0 0 15px rgba(0, 255, 255, 0.8)) hue-rotate(45deg);
+  }
+}
+
+@keyframes ghostyFloat {
+  0% {
+    transform: translateY(0px) scale(1);
+  }
+
+  50% {
+    transform: translateY(-3px) scale(1.05);
+  }
+
+  100% {
+    transform: translateY(0px) scale(1);
   }
 }
 
