@@ -3,12 +3,22 @@ const FirebaseModule = (() => {
     let db = null;
     let initialized = false;
 
+    const HARDCODED_CONFIG = {
+        apiKey: "AIzaSyAgSEZlSO8ox2GEto8xZpsNwcYIEhDyW0w",
+        authDomain: "studycore-eb796.firebaseapp.com",
+        databaseURL: "https://studycore-eb796-default-rtdb.firebaseio.com",
+        projectId: "studycore-eb796",
+        storageBucket: "studycore-eb796.firebasestorage.app",
+        messagingSenderId: "960217883711",
+        appId: "1:960217883711:web:fcbc596465115723f6448a"
+    };
+
     function getConfig() {
         try {
             const raw = localStorage.getItem('sc_firebase_config');
-            if (!raw) return null;
-            return JSON.parse(raw);
-        } catch { return null; }
+            if (raw) return JSON.parse(raw);
+        } catch { }
+        return HARDCODED_CONFIG;
     }
 
     function saveConfig(config) {
