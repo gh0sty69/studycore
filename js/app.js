@@ -1,5 +1,7 @@
 /* App — Main Application Controller */
 const App = (() => {
+    const APP_VERSION = '2.2.0';
+
     function init() {
         I18n.init();
         Storage.initDemoLeaderboard();
@@ -49,11 +51,10 @@ const App = (() => {
             showAuth();
         });
 
-        // Lang toggle — also track switches for polyglot achievement
+        // Lang toggle
         document.getElementById('lang-btn')?.addEventListener('click', () => {
             const next = I18n.getLang() === 'en' ? 'sv' : 'en';
             I18n.setLang(next);
-            // Track language switches
             const username = Auth.currentUser();
             if (username) {
                 const data = Storage.getUserData(username);
@@ -61,12 +62,21 @@ const App = (() => {
                 Storage.saveUserData(username, data);
                 Gamification.checkAchievements(data, username);
             }
-            Router.handleHash(); // Re-render current page
+            Router.handleHash();
         });
 
         // Sidebar toggle (mobile)
         document.getElementById('sidebar-toggle')?.addEventListener('click', () => {
             document.getElementById('sidebar')?.classList.toggle('open');
+        });
+
+        // Update banner buttons
+        document.getElementById('update-banner-btn')?.addEventListener('click', () => {
+            hideUpdateBanner();
+            location.hash = 'patchnotes';
+        });
+        document.getElementById('update-banner-close')?.addEventListener('click', () => {
+            hideUpdateBanner();
         });
 
         I18n.updateDOM();
@@ -79,6 +89,7 @@ const App = (() => {
         I18n.updateDOM();
         Router.init();
         SettingsPage.applyOnLoad();
+        checkForUpdate();
     }
 
     function showAuth() {
@@ -87,11 +98,49 @@ const App = (() => {
         I18n.updateDOM();
     }
 
+    // Version tracking & update notification
+    function checkForUpdate() {
+        const username = Auth.currentUser();
+        if (!username) return;
+        const key = 'sc_last_version_' + username;
+        const lastVersion = localStorage.getItem(key);
+
+        if (lastVersion && lastVersion !== APP_VERSION) {
+            // User has been away, show update notification
+            setTimeout(() => {
+                showUpdateBanner();
+            }, 1200); // delay so it feels natural after login
+        }
+        // Store current version
+        localStorage.setItem(key, APP_VERSION);
+    }
+
+    function showUpdateBanner() {
+        const banner = document.getElementById('update-banner');
+        if (!banner) return;
+        const lang = I18n.getLang();
+        const title = document.getElementById('update-banner-title');
+        const desc = document.getElementById('update-banner-desc');
+        const btn = document.getElementById('update-banner-btn');
+        if (title) title.textContent = lang === 'sv' ? 'StudyCore Uppdaterad!' : 'StudyCore Updated!';
+        if (desc) desc.textContent = lang === 'sv' ? 'Nya funktioner tillgängliga. Kolla vad som är nytt!' : 'New features are available. Check out what\'s new!';
+        if (btn) btn.textContent = lang === 'sv' ? 'Visa Uppdateringar' : 'View Patch Notes';
+        banner.classList.remove('hidden');
+    }
+
+    function hideUpdateBanner() {
+        const banner = document.getElementById('update-banner');
+        if (banner) {
+            banner.style.animation = 'bannerSlideOut 0.3s ease forwards';
+            setTimeout(() => { banner.classList.add('hidden'); banner.style.animation = ''; }, 300);
+        }
+    }
+
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', init);
     } else {
         init();
     }
 
-    return { init };
+    return { init, APP_VERSION };
 })();
