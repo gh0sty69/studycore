@@ -6,12 +6,11 @@ const PatchNotesPage = (() => {
       <div class="patch-timeline">
         <div class="card patch-entry">
           <div class="patch-version">v2.5.0 <span class="patch-date">— March 6, 2026</span></div>
-          <div><span class="patch-tag new">NEW</span> AI Automation, Firebase Cloud & Ghosty Effects</div>
+          <div><span class="patch-tag new">NEW</span> AI Automation & Firebase Cloud</div>
           <ul class="patch-list">
             <li>🤖 Automated AI — 100% free automated Gemini Pro AI without needing manual API keys</li>
             <li>☁️ Firebase Cloud Sync — completely seamless login across home and school computers</li>
             <li>🚀 Aggressive Cache Busting — ensures that the app instantly updates for all users</li>
-            <li>👻 Special Owner Effects — brand new insane CSS glowing/pulsing animations strictly for the creator's name ("ghosty")</li>
           </ul>
         </div>
         <div class="card patch-entry">
@@ -54,9 +53,7 @@ const PatchNotesPage = (() => {
           <ul class="patch-list">
             <li>🎮 Study Games — Word Scramble, Memory Match, Trivia Blitz, Speed Typing</li>
             <li>📋 Patch Notes page</li>
-            <li>💜 Credits page for ghosty</li>
             <li>🏆 Real-only leaderboard (no fake users)</li>
-            <li>👑 Owner badge with animated rainbow gradient name</li>
             <li>🎖️ 16 total achievements</li>
             <li>📄 Google Docs & Slides import</li>
             <li>🖼️ Custom app logo</li>
