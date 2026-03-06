@@ -8,7 +8,7 @@ const CreditsPage = (() => {
         <div class="credits-name">ghosty</div>
         <div class="credits-role">${I18n.t('developedBy')} & Creator</div>
         <div class="owner-badge mt-2" style="display:inline-flex">👑 ${I18n.t('owner')}</div>
-        <p class="mt-3 text-muted" style="max-width:500px;margin-left:auto;margin-right:auto">${I18n.t('creditsDesc')}</p>
+        <p class="mt-3 text-muted" style="max-width:500px;margin-left:auto;margin-right:auto">StudyCore was designed and developed with <span style="color:#e74c3c">❤</span> as a modern study platform to help students learn more effectively.</p>
         <div class="credits-links">
           <a href="https://github.com/gh0sty69" target="_blank" class="btn btn-secondary">🔗 GitHub</a>
           <a href="https://github.com/gh0sty69/studycore" target="_blank" class="btn btn-secondary">📂 Source Code</a>

@@ -13,11 +13,14 @@ const Router = (() => {
         settings: { render: () => SettingsPage.render(), init: () => SettingsPage.init() },
         games: { render: () => GamesPage.render(), init: () => GamesPage.init() },
         notes: { render: () => NotesPage.render(), init: () => NotesPage.init() },
+        chat: { render: () => ChatPage.render(), init: () => ChatPage.init() },
         patchnotes: { render: () => PatchNotesPage.render(), init: null },
         credits: { render: () => CreditsPage.render(), init: null },
     };
 
     function navigate(pageName) {
+        // Cleanup previous page
+        try { ChatPage.cleanup(); } catch { }
         const page = pages[pageName] || pages.dashboard;
         const container = document.getElementById('page-container');
         if (!container) return;

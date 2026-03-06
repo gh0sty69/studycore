@@ -27,7 +27,7 @@ const I18n = (() => {
       sExportData: 'Export Data', sExport: 'Download JSON', sImportData: 'Import Data', sImport: 'Upload JSON', sResetStreak: 'Reset Streak', sReset: 'Reset', sResetConfirm: 'Are you sure? This will reset your streak to 0.',
       sDeleteAccount: 'Delete Account', sDelete: 'Delete', sDeleteConfirm: 'Are you sure? This will permanently delete your account and all data.',
       sChangePassword: 'Change Password', sCurrentPw: 'Current Password', sNewPw: 'New Password', sConfirmPw: 'Confirm New Password', sChangePwBtn: 'Update Password', sPwChanged: '✅ Password changed!', sWrongPassword: 'Current password is incorrect', sAllFieldsRequired: 'All fields are required',
-      navNotes: 'Saved Notes',
+      navNotes: 'Saved Notes', navChat: 'Chat',
       sAIIntegration: 'AI Integration', sAIDesc: 'Add your free Google Gemini API key to enable AI-powered quizzes and summaries. Get your key at ai.google.dev', sGeminiKey: 'Gemini API Key', sGeminiKeyPlaceholder: 'Paste your API key here...', sAIActive: 'AI is active',
       sMadeWith: 'Made with <span style="color:#e74c3c">❤</span> by'
     }, sv: {
@@ -55,7 +55,7 @@ const I18n = (() => {
       sExportData: 'Exportera Data', sExport: 'Ladda ner JSON', sImportData: 'Importera Data', sImport: 'Ladda upp JSON', sResetStreak: 'Återställ Svit', sReset: 'Återställ', sResetConfirm: 'Är du säker? Detta återställer din svit till 0.',
       sDeleteAccount: 'Radera Konto', sDelete: 'Radera', sDeleteConfirm: 'Är du säker? Detta raderar permanent ditt konto och all data.',
       sChangePassword: 'Ändra Lösenord', sCurrentPw: 'Nuvarande Lösenord', sNewPw: 'Nytt Lösenord', sConfirmPw: 'Bekräfta Nytt Lösenord', sChangePwBtn: 'Uppdatera Lösenord', sPwChanged: '✅ Lösenordet ändrat!', sWrongPassword: 'Nuvarande lösenord är felaktigt', sAllFieldsRequired: 'Alla fält krävs',
-      navNotes: 'Sparade Anteckningar',
+      navNotes: 'Sparade Anteckningar', navChat: 'Chatt',
       sAIIntegration: 'AI-Integration', sAIDesc: 'Lägg till din gratis Google Gemini API-nyckel för AI-drivna quiz och sammanfattningar. Hämta din nyckel på ai.google.dev', sGeminiKey: 'Gemini API-Nyckel', sGeminiKeyPlaceholder: 'Klistra in din API-nyckel här...', sAIActive: 'AI är aktiv',
       sMadeWith: 'Gjord med <span style="color:#e74c3c">❤</span> av'
     }
