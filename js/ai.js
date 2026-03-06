@@ -32,16 +32,18 @@ const AI = (() => {
     // Generate quiz questions from notes
     async function generateQuiz(notes, lang) {
         const langName = lang === 'sv' ? 'Swedish' : 'English';
-        const prompt = `You are a study assistant. Based on the following study notes, generate exactly 5 multiple-choice quiz questions. Each question must test understanding of the content, NOT just fill in a missing word.
+        const prompt = `You are a strict, high-level academic study assistant. Based on the following study notes, generate exactly 5 complex multiple-choice questions.
 
-IMPORTANT RULES:
-- Questions should test COMPREHENSION, not just vocabulary
-- Each question has exactly 4 options with 1 correct
-- Respond ONLY with valid JSON, no markdown, no code blocks
-- All text must be in ${langName}
+CRITICAL RULES:
+1. ABSOLUTELY NO FILL-IN-THE-BLANK QUESTIONS. You are forbidden from using "___" or asking the user to complete a sentence.
+2. ABSOLUTELY NO SIMPLE VOCABULARY MATCHING. Do not ask "What is the definition of X?".
+3. You MUST test deep conceptual understanding, applied knowledge, "How", "Why", and relationships between the ideas given in the notes.
+4. Each question MUST have exactly 4 plausible options, where 3 are strong distractors and only 1 is fully correct.
+5. You MUST respond ONLY with a raw, valid JSON array. No markdown formatting (\`\`\`json), no introductory text.
+6. All text MUST be written in perfect ${langName}.
 
 Response format (strict JSON array):
-[{"question":"What is...?","options":["A","B","C","D"],"correct":0}]
+[{"question":"A complex conceptual question...?","options":["A","B","C","D"],"correct":0}]
 
 The "correct" field is the index (0-3) of the correct answer.
 
