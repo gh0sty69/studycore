@@ -13,24 +13,37 @@ const App = (() => {
         }
 
         // Auth forms
-        document.getElementById('login-form')?.addEventListener('submit', (e) => {
+        document.getElementById('login-form')?.addEventListener('submit', async (e) => {
             e.preventDefault();
             const u = document.getElementById('login-username').value.trim();
             const p = document.getElementById('login-password').value;
-            const result = Auth.login(u, p);
+            const btn = e.target.querySelector('button');
+            const orig = btn.innerHTML; btn.innerHTML = '...'; btn.disabled = true;
+            document.getElementById('login-error').textContent = '';
+
+            const result = await Auth.login(u, p);
+
+            btn.innerHTML = orig; btn.disabled = false;
             if (result.ok) { showApp(); }
-            else { document.getElementById('login-error').textContent = I18n.t(result.error); }
+            else { document.getElementById('login-error').textContent = I18n.t(result.error) || result.error; }
         });
 
-        document.getElementById('signup-form')?.addEventListener('submit', (e) => {
+        document.getElementById('signup-form')?.addEventListener('submit', async (e) => {
             e.preventDefault();
             const u = document.getElementById('signup-username').value.trim();
             const p = document.getElementById('signup-password').value;
             const c = document.getElementById('signup-confirm').value;
             if (p !== c) { document.getElementById('signup-error').textContent = I18n.t('signupErrorMatch'); return; }
-            const result = Auth.signup(u, p);
+
+            const btn = e.target.querySelector('button');
+            const orig = btn.innerHTML; btn.innerHTML = '...'; btn.disabled = true;
+            document.getElementById('signup-error').textContent = '';
+
+            const result = await Auth.signup(u, p);
+
+            btn.innerHTML = orig; btn.disabled = false;
             if (result.ok) { showApp(); }
-            else { document.getElementById('signup-error').textContent = I18n.t(result.error); }
+            else { document.getElementById('signup-error').textContent = I18n.t(result.error) || result.error; }
         });
 
         // Toggle auth forms

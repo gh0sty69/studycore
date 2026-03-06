@@ -28,7 +28,17 @@ const Storage = (() => {
     }
     function saveUserData(username, data) {
         const users = getUsers();
-        if (users[username]) { users[username].data = data; saveUsers(users); }
+        if (users[username]) {
+            users[username].data = data;
+            saveUsers(users);
+
+            // Sync to Firebase if connected
+            if (window.FirebaseModule && FirebaseModule.isAvailable()) {
+                try {
+                    FirebaseModule.getDB().ref('users/' + username + '/data').set(data);
+                } catch (e) { }
+            }
+        }
     }
     function getDefaultData() {
         return {
