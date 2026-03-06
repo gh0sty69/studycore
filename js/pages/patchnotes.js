@@ -44,7 +44,7 @@ const PatchNotesPage = (() => {
           <ul class="patch-list">
             <li>🎮 Study Games — Word Scramble, Memory Match, Trivia Blitz, Speed Typing</li>
             <li>📋 Patch Notes page</li>
-            <li>💜 Credits page for ghosty</li>
+            <li>💜 Credits page for StudyCore</li>
             <li>🏆 Real-only leaderboard (no fake users)</li>
             <li>👑 Owner badge with animated rainbow gradient name</li>
             <li>🎖️ 16 total achievements</li>

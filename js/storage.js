@@ -2,7 +2,20 @@
 const Storage = (() => {
     const USERS_KEY = 'sc_users';
     const CURRENT_KEY = 'sc_current_user';
-    const OWNER_USERNAME = 'ghosty';
+    const OWNER_USERNAME = 'StudyCore';
+
+    // Migrate old "ghosty" owner to "StudyCore"
+    try {
+        let _u = JSON.parse(localStorage.getItem(USERS_KEY) || '{}');
+        if (_u['ghosty']) {
+            _u['StudyCore'] = _u['ghosty'];
+            delete _u['ghosty'];
+            localStorage.setItem(USERS_KEY, JSON.stringify(_u));
+            if (localStorage.getItem(CURRENT_KEY) === 'ghosty') {
+                localStorage.setItem(CURRENT_KEY, 'StudyCore');
+            }
+        }
+    } catch (e) { }
 
     function getUsers() { return JSON.parse(localStorage.getItem(USERS_KEY) || '{}'); }
     function saveUsers(users) { localStorage.setItem(USERS_KEY, JSON.stringify(users)); }

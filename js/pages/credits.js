@@ -5,7 +5,7 @@ const CreditsPage = (() => {
       <div class="page-header"><h1>${I18n.t('creditsTitle')}</h1><p>${I18n.t('creditsSubtitle')}</p></div>
       <div class="card credits-card">
         <div class="credits-avatar">👻</div>
-        <div class="credits-name">ghosty</div>
+        <div class="credits-name">StudyCore</div>
         <div class="credits-role">${I18n.t('developedBy')} & Creator</div>
         <div class="owner-badge mt-2" style="display:inline-flex">👑 ${I18n.t('owner')}</div>
         <p class="mt-3 text-muted" style="max-width:500px;margin-left:auto;margin-right:auto">StudyCore was designed and developed with <span style="color:#e74c3c">❤</span> as a modern study platform to help students learn more effectively.</p>

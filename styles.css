@@ -1640,6 +1640,8 @@ img {
   padding: 0.15rem 0.5rem;
   background: linear-gradient(135deg, var(--accent), #9b6dff);
   color: #fff;
+  -webkit-text-fill-color: #fff;
+  /* Fix transparent inheritance */
   font-size: 0.65rem;
   font-weight: 700;
   border-radius: var(--radius-xl);
