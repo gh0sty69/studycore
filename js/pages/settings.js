@@ -57,16 +57,7 @@ const SettingsPage = (() => {
         </div>
       </div>
 
-      <!-- AI Integration -->
-      <div class="card settings-section">
-        <h3>🤖 ${t('sAIIntegration')}</h3>
-        <p style="font-size:0.82rem;color:var(--text-muted);margin-bottom:0.75rem">${t('sAIDesc')}</p>
-        <div class="settings-row" style="flex-direction:column;align-items:stretch;gap:0.5rem">
-          <label>${t('sGeminiKey')}</label>
-          <input type="password" id="settings-gemini-key" class="form-group" value="${settings.geminiKey || ''}" placeholder="${t('sGeminiKeyPlaceholder')}" style="margin-bottom:0">
-        </div>
-        <p id="ai-key-result" class="mt-1" style="font-size:0.8rem;min-height:1rem">${settings.geminiKey ? '<span style="color:var(--success)">✅ ' + t('sAIActive') + '</span>' : ''}</p>
-      </div>
+
 
       <!-- Firebase Backend -->
       <div class="card settings-section">
@@ -250,14 +241,6 @@ const SettingsPage = (() => {
       const s = getUserSettings(); s.animations = e.target.checked; saveSettings(s);
       document.body.style.setProperty('--transition-base', s.animations ? '0.25s ease' : '0s');
       document.body.style.setProperty('--transition-fast', s.animations ? '0.15s ease' : '0s');
-    });
-
-    // Gemini API key
-    document.getElementById('settings-gemini-key')?.addEventListener('blur', (e) => {
-      const s = getUserSettings(); s.geminiKey = e.target.value.trim(); saveSettings(s);
-      const r = document.getElementById('ai-key-result');
-      if (s.geminiKey) { r.innerHTML = '<span style="color:var(--success)">✅ ' + t('sAIActive') + '</span>'; }
-      else { r.innerHTML = ''; }
     });
 
     // Firebase Backend Config

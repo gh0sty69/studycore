@@ -1,12 +1,13 @@
 /* AI Module — Google Gemini Integration */
 const AI = (() => {
     const GEMINI_MODEL = 'gemini-2.0-flash';
+    const HARDCODED_KEY = 'AIzaSyAOv21_2QS92W33f_a3Eoo9QwOgP88Ktl0';
 
     function getApiKey() {
-        try { return SettingsPage.getUserSettings().geminiKey || ''; } catch { return ''; }
+        return HARDCODED_KEY;
     }
 
-    function isAvailable() { return getApiKey().length > 10; }
+    function isAvailable() { return true; }
 
     async function call(prompt) {
         const key = getApiKey();
