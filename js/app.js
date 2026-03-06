@@ -1,6 +1,6 @@
 /* App — Main Application Controller */
 const App = (() => {
-    const APP_VERSION = '2.7.2';
+    const APP_VERSION = '2.7.3';
 
     function init() {
         I18n.init();
@@ -70,6 +70,56 @@ const App = (() => {
         document.getElementById('logout-btn')?.addEventListener('click', () => {
             Auth.logout();
             showAuth();
+        });
+
+        // Bug Reporter Modal & Discord Webhook
+        const bugModal = document.getElementById('bug-report-modal');
+        document.getElementById('bug-report-btn')?.addEventListener('click', () => {
+            bugModal.classList.remove('hidden');
+        });
+        document.getElementById('close-bug-report')?.addEventListener('click', () => {
+            bugModal.classList.add('hidden');
+        });
+
+        document.getElementById('submit-bug-report')?.addEventListener('click', async () => {
+            const textEl = document.getElementById('bug-report-text');
+            const statusEl = document.getElementById('bug-report-status');
+            const text = textEl.value.trim();
+            if (!text) return;
+
+            // ⚠️ USER: PASTE YOUR DISCORD WEBHOOK URL HERE ⚠️
+            const WEBHOOK_URL = 'YOUR_DISCORD_WEBHOOK_URL_HERE';
+
+            const payload = {
+                content: `🚨 **New Bug Report** from user: \`${Auth.currentUser() || 'Unknown'}\`\n\n**Report:**\n> ${text}`
+            };
+
+            statusEl.textContent = 'Sending...';
+            statusEl.style.color = 'var(--text-main)';
+
+            try {
+                const response = await fetch(WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (response.ok) {
+                    statusEl.textContent = 'Report sent successfully! Thank you.';
+                    statusEl.style.color = 'var(--success)';
+                    textEl.value = '';
+                    setTimeout(() => bugModal.classList.add('hidden'), 2000);
+                } else {
+                    const err = await response.text();
+                    console.error('Webhook error:', err);
+                    statusEl.textContent = 'Webhook URL not configured or invalid.';
+                    statusEl.style.color = 'var(--danger)';
+                }
+            } catch (err) {
+                console.error('Fetch error:', err);
+                statusEl.textContent = 'Failed to send report. Network error.';
+                statusEl.style.color = 'var(--danger)';
+            }
         });
 
         // Lang toggle

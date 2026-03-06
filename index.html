@@ -140,6 +140,9 @@
                 </a>
             </nav>
             <div class="sidebar-footer">
+                <button id="bug-report-btn" class="btn btn-secondary btn-full"
+                    style="margin-bottom: 0.5rem; background: rgba(255, 118, 117, 0.15); color: var(--danger); border: 1px solid rgba(255, 118, 117, 0.3);">🐛
+                    Report Bug</button>
                 <button id="logout-btn" class="btn btn-ghost btn-full" data-i18n="logout">Logout</button>
             </div>
         </aside>
@@ -230,6 +233,29 @@
                     fully offline!</li>
             </ol>
             <button id="understood-offline-guide" class="btn btn-primary btn-full">I Understand</button>
+        </div>
+    </div>
+
+    <!-- Bug Report Modal -->
+    <div id="bug-report-modal" class="tour-overlay hidden"
+        style="z-index: 10000; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.8);">
+        <div class="card" style="max-width: 500px; width: 90%; position: relative;">
+            <button id="close-bug-report" class="btn btn-secondary btn-sm"
+                style="position: absolute; top: 1rem; right: 1rem;">✕</button>
+            <h2 style="margin-top: 0; color: var(--danger);">🐛 Report a Bug</h2>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">
+                Found a glitch or have a suggestion? Send it directly to the developer's Discord server.
+            </p>
+            <div class="form-group">
+                <label>Bug Description / Feedback</label>
+                <textarea id="bug-report-text" rows="4"
+                    style="width: 100%; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: var(--bg-input); padding: 0.75rem; color: var(--text-main); font-family: var(--font); resize: vertical; outline: none;"
+                    placeholder="Explain the issue..."></textarea>
+            </div>
+            <button id="submit-bug-report" class="btn btn-primary btn-full"
+                style="background: var(--danger); border: none;">Send Report</button>
+            <div id="bug-report-status"
+                style="margin-top: 0.5rem; text-align: center; font-size: 0.85rem; font-weight: 500;"></div>
         </div>
     </div>
 

@@ -4,35 +4,64 @@ const PatchNotesPage = (() => {
     return `<div class="page-enter">
       <div class="page-header"><h1>${I18n.t('patchNotesTitle')}</h1><p>${I18n.t('patchNotesSubtitle')}</p></div>
       <div class="patch-timeline">
+        
+        <div class="card patch-entry">
+          <div class="patch-version">v2.7.3 <span class="patch-date">— March 6, 2026</span></div>
+          <div class="patch-category" style="color:var(--success); font-weight:600; margin-top:0.5rem;">✨ New Features</div>
+          <ul class="patch-list">
+            <li>🐛 <b>Discord Bug Reporter:</b> Added a "Report Bug" button to the sidebar that securely beams bug reports straight to the developer's Discord server.</li>
+            <li>💬 <b>Chat UI Overhaul:</b> The global chat feature now has fully modern, beautiful, iMessage/Discord style chat bubble CSS.</li>
+          </ul>
+          <div class="patch-category" style="color:var(--danger); font-weight:600; margin-top:0.5rem;">🛠️ Bug Fixes</div>
+          <ul class="patch-list">
+            <li>Fixed an issue where the new Chat system wasn't loading its CSS files, leaving it looking like 1995.</li>
+          </ul>
+          <div class="patch-category" style="color:var(--text-muted); font-weight:600; margin-top:0.5rem;">📌 Minor Changes</div>
+          <ul class="patch-list">
+            <li>Patch Notes are now clearly categorized for easier reading.</li>
+            <li>Secret upgrades to the AI model behind the scenes...</li>
+          </ul>
+        </div>
+
         <div class="card patch-entry">
           <div class="patch-version">v2.7.2 <span class="patch-date">— March 6, 2026</span></div>
-          <div><span class="patch-tag new">NEW</span> Offline Sync Guide</div>
+          <div class="patch-category" style="color:var(--success); font-weight:600; margin-top:0.5rem;">✨ New Features</div>
           <ul class="patch-list">
-            <li>📖 Added a built-in Offline Sync guide in Settings to assist users stuck behind strict school/corporate Wi-Fi firewalls blocking cloud connectivity.</li>
+            <li>📖 <b>Offline Sync Guide:</b> Built-in help modal in Settings to assist users stuck behind strict school/corporate Wi-Fi firewalls blocking cloud connectivity.</li>
           </ul>
         </div>
+        
         <div class="card patch-entry">
           <div class="patch-version">v2.7.0 <span class="patch-date">— March 6, 2026</span></div>
-          <div><span class="patch-tag new">NEW</span> Nuclear Cloud Override Login & Diagnostics</div>
+          <div class="patch-category" style="color:var(--success); font-weight:600; margin-top:0.5rem;">✨ New Features</div>
           <ul class="patch-list">
-            <li>🚀 Complete rewrite of login architecture to prioritize Cloud credentials. Logging into a valid cloud account now instantly purges local broken data, permanently solving the cross-device sync lockouts.</li>
-            <li>⚠️ <b>Notice:</b> Many school Wi-Fi firewalls physically block Firebase Cloud servers. If your login diagnostically reports "No Cloud Configured", your school is blocking the app. Use the new <b>Download/Upload JSON</b> buttons in Settings on a USB drive instead to bypass the firewall!</li>
+            <li>☢️ <b>Nuclear Cloud Override:</b> Complete rewrite of login architecture to prioritize Cloud credentials. Logging into a valid cloud account now instantly purges local broken data.</li>
+          </ul>
+          <div class="patch-category" style="color:var(--danger); font-weight:600; margin-top:0.5rem;">🛠️ Bug Fixes</div>
+          <ul class="patch-list">
+            <li>Permanently solved the cross-device sync lockouts.</li>
+            <li>Added detailed Diagnostic orange text to login failures to detect network drops exactly.</li>
           </ul>
         </div>
+
         <div class="card patch-entry">
           <div class="patch-version">v2.6.0 <span class="patch-date">— March 6, 2026</span></div>
-          <div><span class="patch-tag new">NEW</span> Force Cloud Sync</div>
+          <div class="patch-category" style="color:var(--success); font-weight:600; margin-top:0.5rem;">✨ New Features</div>
           <ul class="patch-list">
-            <li>⚙️ Force Sync button in Settings to manually overwrite the Firebase cloud with local data. Bypasses all password collisions.</li>
+            <li>⚙️ <b>Force Cloud Sync:</b> New button in Settings to manually overwrite the Firebase cloud with local data.</li>
+          </ul>
+          <div class="patch-category" style="color:var(--text-muted); font-weight:600; margin-top:0.5rem;">📌 Minor Changes</div>
+          <ul class="patch-list">
+            <li>Bypasses all password collisions.</li>
           </ul>
         </div>
+
         <div class="card patch-entry">
           <div class="patch-version">v2.5.0 <span class="patch-date">— March 6, 2026</span></div>
-          <div><span class="patch-tag new">NEW</span> AI Automation & Firebase Cloud</div>
+          <div class="patch-category" style="color:var(--success); font-weight:600; margin-top:0.5rem;">✨ New Features</div>
           <ul class="patch-list">
             <li>🤖 Automated AI — 100% free automated Gemini Pro AI without needing manual API keys</li>
             <li>☁️ Firebase Cloud Sync — completely seamless login across home and school computers</li>
-            <li>🚀 Aggressive Cache Busting — ensures that the app instantly updates for all users</li>
           </ul>
         </div>
         <div class="card patch-entry">
