@@ -29,6 +29,7 @@ const I18n = (() => {
       sChangePassword: 'Change Password', sCurrentPw: 'Current Password', sNewPw: 'New Password', sConfirmPw: 'Confirm New Password', sChangePwBtn: 'Update Password', sPwChanged: '✅ Password changed!', sWrongPassword: 'Current password is incorrect', sAllFieldsRequired: 'All fields are required',
       navNotes: 'Saved Notes', navChat: 'Chat',
       sAIIntegration: 'AI Integration', sAIDesc: 'Add your free Google Gemini API key to enable AI-powered quizzes and summaries. Get your key at ai.google.dev', sGeminiKey: 'Gemini API Key', sGeminiKeyPlaceholder: 'Paste your API key here...', sAIActive: 'AI is active',
+      sFirebase: 'Firebase Backend', sFirebaseDesc: 'Add your Firebase Realtime Database config to enable global cross-device chat and a true global leaderboard.', sFirebaseConfig: 'Firebase Config JSON', sSaveFirebase: 'Connect Firebase', sFirebaseActive: 'Firebase Connected', sFirebaseError: 'Connection Failed', sFirebaseInvalid: 'Invalid JSON format',
       sMadeWith: 'Made with <span style="color:#e74c3c">❤</span> by'
     }, sv: {
       authTagline: 'AI-Driven Studieassistent', loginTitle: 'Logga In', signupTitle: 'Skapa Konto', username: 'Användarnamn', password: 'Lösenord', confirmPassword: 'Bekräfta Lösenord', loginBtn: 'Logga In', signupBtn: 'Skapa Konto', noAccount: 'Har du inget konto?', signUpLink: 'Registrera dig', haveAccount: 'Har du redan ett konto?', loginLink: 'Logga In', loginError: 'Ogiltigt användarnamn eller lösenord', signupErrorMatch: 'Lösenorden matchar inte', signupErrorExists: 'Användarnamnet finns redan', signupErrorShort: 'Lösenordet måste vara minst 4 tecken',
@@ -57,6 +58,7 @@ const I18n = (() => {
       sChangePassword: 'Ändra Lösenord', sCurrentPw: 'Nuvarande Lösenord', sNewPw: 'Nytt Lösenord', sConfirmPw: 'Bekräfta Nytt Lösenord', sChangePwBtn: 'Uppdatera Lösenord', sPwChanged: '✅ Lösenordet ändrat!', sWrongPassword: 'Nuvarande lösenord är felaktigt', sAllFieldsRequired: 'Alla fält krävs',
       navNotes: 'Sparade Anteckningar', navChat: 'Chatt',
       sAIIntegration: 'AI-Integration', sAIDesc: 'Lägg till din gratis Google Gemini API-nyckel för AI-drivna quiz och sammanfattningar. Hämta din nyckel på ai.google.dev', sGeminiKey: 'Gemini API-Nyckel', sGeminiKeyPlaceholder: 'Klistra in din API-nyckel här...', sAIActive: 'AI är aktiv',
+      sFirebase: 'Firebase-Backend', sFirebaseDesc: 'Lägg till din Firebase Realtime Database-konfig för att aktivera global chatt och en global topplista.', sFirebaseConfig: 'Firebase Konfig JSON', sSaveFirebase: 'Anslut Firebase', sFirebaseActive: 'Firebase Ansluten', sFirebaseError: 'Anslutning Misslyckades', sFirebaseInvalid: 'Ogiltigt JSON-format',
       sMadeWith: 'Gjord med <span style="color:#e74c3c">❤</span> av'
     }
   };

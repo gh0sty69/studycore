@@ -68,6 +68,18 @@ const SettingsPage = (() => {
         <p id="ai-key-result" class="mt-1" style="font-size:0.8rem;min-height:1rem">${settings.geminiKey ? '<span style="color:var(--success)">✅ ' + t('sAIActive') + '</span>' : ''}</p>
       </div>
 
+      <!-- Firebase Backend -->
+      <div class="card settings-section">
+        <h3>🔥 ${t('sFirebase')}</h3>
+        <p style="font-size:0.82rem;color:var(--text-muted);margin-bottom:0.75rem">${t('sFirebaseDesc')}</p>
+        <div class="settings-row" style="flex-direction:column;align-items:stretch;gap:0.5rem">
+          <label>${t('sFirebaseConfig')}</label>
+          <textarea id="settings-firebase-config" rows="4" style="font-family:monospace;font-size:0.75rem" placeholder='{"apiKey":"...","authDomain":"...","databaseURL":"...","projectId":"..."}'>${(() => { const c = FirebaseModule.getConfig(); return c ? JSON.stringify(c, null, 2) : ''; })()}</textarea>
+        </div>
+        <button class="btn btn-primary btn-sm mt-1" id="save-firebase-btn">${t('sSaveFirebase')}</button>
+        <p id="firebase-result" class="mt-1" style="font-size:0.8rem;min-height:1rem">${FirebaseModule.isAvailable() ? '<span style="color:var(--success)">🟢 ' + t('sFirebaseActive') + '</span>' : ''}</p>
+      </div>
+
       <!-- Timer Settings -->
       <div class="card settings-section">
         <h3>⏱️ ${t('sTimerSettings')}</h3>
@@ -246,6 +258,37 @@ const SettingsPage = (() => {
       const r = document.getElementById('ai-key-result');
       if (s.geminiKey) { r.innerHTML = '<span style="color:var(--success)">✅ ' + t('sAIActive') + '</span>'; }
       else { r.innerHTML = ''; }
+    });
+
+    // Firebase Backend Config
+    document.getElementById('save-firebase-btn')?.addEventListener('click', () => {
+      const input = document.getElementById('settings-firebase-config');
+      const resultEl = document.getElementById('firebase-result');
+      const val = input?.value.trim();
+
+      if (!val) {
+        FirebaseModule.saveConfig(null);
+        FirebaseModule.reset();
+        resultEl.innerHTML = '';
+        return;
+      }
+
+      try {
+        const config = JSON.parse(val);
+        if (!config.apiKey || !config.databaseURL) throw new Error('Missing apiKey or databaseURL');
+
+        FirebaseModule.saveConfig(config);
+        FirebaseModule.reset();
+        const db = FirebaseModule.init();
+
+        if (db) {
+          resultEl.innerHTML = '<span style="color:var(--success)">🟢 ' + t('sFirebaseActive') + '</span>';
+        } else {
+          resultEl.innerHTML = '<span style="color:var(--danger)">❌ ' + t('sFirebaseError') + '</span>';
+        }
+      } catch (err) {
+        resultEl.innerHTML = '<span style="color:var(--danger)">❌ ' + t('sFirebaseInvalid') + '</span>';
+      }
     });
 
     // Timer settings

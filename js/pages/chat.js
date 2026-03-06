@@ -1,28 +1,35 @@
-/* Chat Page — Real-time shared chat via localStorage */
+/* Chat Page — Real-time chat via Firebase (fallback to localStorage) */
 const ChatPage = (() => {
+    let firebaseListener = null;
     let pollInterval = null;
     let lastCount = 0;
 
     const CHAT_KEY = 'sc_chat_messages';
     const MAX_MESSAGES = 200;
 
-    function getMessages() {
+    // --- localStorage fallback ---
+    function getLocalMessages() {
         try { return JSON.parse(localStorage.getItem(CHAT_KEY) || '[]'); }
         catch { return []; }
     }
-
-    function saveMessages(msgs) {
-        // Keep last MAX_MESSAGES
+    function saveLocalMessages(msgs) {
         if (msgs.length > MAX_MESSAGES) msgs = msgs.slice(-MAX_MESSAGES);
         localStorage.setItem(CHAT_KEY, JSON.stringify(msgs));
     }
 
     function render() {
         const sv = I18n.getLang() === 'sv';
-        const username = Auth.currentUser();
-        const isOwner = Storage.isOwner(username);
+        const online = FirebaseModule.isAvailable();
+        const statusText = online
+            ? `<span style="color:var(--success);font-size:0.75rem">🟢 ${sv ? 'Online — realtidschatt' : 'Online — real-time chat'}</span>`
+            : `<span style="color:var(--text-muted);font-size:0.75rem">📡 ${sv ? 'Lokal chatt — lägg till Firebase i inställningar för global chatt' : 'Local chat — add Firebase in settings for global chat'}</span>`;
+
         return `<div class="page-enter">
-      <div class="page-header"><h1>💬 ${sv ? 'Chatt' : 'Chat'}</h1><p>${sv ? 'Chatta med andra StudyCore-användare.' : 'Chat with other StudyCore users.'}</p></div>
+      <div class="page-header">
+        <h1>💬 ${sv ? 'Chatt' : 'Chat'}</h1>
+        <p>${sv ? 'Chatta med andra StudyCore-användare.' : 'Chat with other StudyCore users.'}</p>
+      </div>
+      <div style="margin-bottom:0.5rem">${statusText}</div>
       <div class="card chat-container">
         <div class="chat-messages" id="chat-messages"></div>
         <div class="chat-input-bar">
@@ -34,35 +41,44 @@ const ChatPage = (() => {
     }
 
     function init() {
-        renderMessages();
-        // Send
         document.getElementById('chat-send')?.addEventListener('click', sendMessage);
         document.getElementById('chat-input')?.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
         });
         document.getElementById('chat-input')?.focus();
-        // Poll for new messages every 1.5s
-        lastCount = getMessages().length;
-        pollInterval = setInterval(pollMessages, 1500);
-        // Listen for storage events from other tabs
-        window.addEventListener('storage', onStorageChange);
+
+        if (FirebaseModule.isAvailable()) {
+            // Firebase real-time listener
+            const db = FirebaseModule.getDB();
+            const chatRef = db.ref('chat').orderByChild('time').limitToLast(MAX_MESSAGES);
+            firebaseListener = chatRef.on('value', (snapshot) => {
+                const msgs = [];
+                snapshot.forEach(child => { msgs.push(child.val()); });
+                renderMessages(msgs);
+            });
+        } else {
+            // localStorage fallback
+            renderMessages(getLocalMessages());
+            lastCount = getLocalMessages().length;
+            pollInterval = setInterval(() => {
+                const msgs = getLocalMessages();
+                if (msgs.length !== lastCount) { lastCount = msgs.length; renderMessages(msgs); }
+            }, 1500);
+            window.addEventListener('storage', onStorageChange);
+        }
     }
 
     function cleanup() {
+        if (firebaseListener && FirebaseModule.isAvailable()) {
+            try { FirebaseModule.getDB().ref('chat').off('value', firebaseListener); } catch { }
+            firebaseListener = null;
+        }
         if (pollInterval) { clearInterval(pollInterval); pollInterval = null; }
         window.removeEventListener('storage', onStorageChange);
     }
 
     function onStorageChange(e) {
-        if (e.key === CHAT_KEY) renderMessages();
-    }
-
-    function pollMessages() {
-        const msgs = getMessages();
-        if (msgs.length !== lastCount) {
-            lastCount = msgs.length;
-            renderMessages();
-        }
+        if (e.key === CHAT_KEY) renderMessages(getLocalMessages());
     }
 
     function sendMessage() {
@@ -71,18 +87,27 @@ const ChatPage = (() => {
         if (!text) return;
 
         const username = Auth.currentUser();
-        const msgs = getMessages();
-        msgs.push({
+        const msg = {
             user: username,
             text: text,
             time: Date.now(),
             isOwner: Storage.isOwner(username)
-        });
-        saveMessages(msgs);
-        input.value = '';
-        renderMessages();
+        };
 
-        // Award XP for first chat message
+        if (FirebaseModule.isAvailable()) {
+            // Push to Firebase
+            FirebaseModule.getDB().ref('chat').push(msg);
+        } else {
+            // Save locally
+            const msgs = getLocalMessages();
+            msgs.push(msg);
+            saveLocalMessages(msgs);
+            renderMessages(getLocalMessages());
+        }
+
+        input.value = '';
+
+        // Award XP for first chat
         const data = Storage.getUserData(username);
         if (!data.chatMessageSent) {
             data.chatMessageSent = true;
@@ -91,14 +116,13 @@ const ChatPage = (() => {
         }
     }
 
-    function renderMessages() {
+    function renderMessages(msgs) {
         const container = document.getElementById('chat-messages');
         if (!container) return;
-        const msgs = getMessages();
         const currentUser = Auth.currentUser();
         const sv = I18n.getLang() === 'sv';
 
-        if (msgs.length === 0) {
+        if (!msgs || msgs.length === 0) {
             container.innerHTML = `<div class="chat-empty">${sv ? 'Inga meddelanden ännu. Var den första att chatta!' : 'No messages yet. Be the first to chat!'} 💬</div>`;
             return;
         }
@@ -110,16 +134,14 @@ const ChatPage = (() => {
             const badge = m.isOwner ? ' <span class="owner-badge" style="font-size:0.6rem;padding:0.1rem 0.3rem">👑 OWNER</span>' : '';
             return `<div class="chat-msg ${isMine ? 'chat-msg-mine' : 'chat-msg-other'}">
         <div class="chat-msg-header">
-          <span class="chat-msg-user ${nameClass}">${m.user}${badge}</span>
+          <span class="chat-msg-user ${nameClass}">${escapeHtml(m.user)}${badge}</span>
           <span class="chat-msg-time">${timeStr}</span>
         </div>
         <div class="chat-msg-text">${escapeHtml(m.text)}</div>
       </div>`;
         }).join('');
 
-        // Scroll to bottom
         container.scrollTop = container.scrollHeight;
-        lastCount = msgs.length;
     }
 
     function formatTime(ts) {
