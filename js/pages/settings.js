@@ -132,6 +132,10 @@ const SettingsPage = (() => {
           <label>${t('sResetStreak')}</label>
           <button class="btn btn-danger btn-sm" id="reset-streak-btn">${t('sReset')}</button>
         </div>
+        <div class="settings-row" style="margin-top:0.5rem; border-top:1px solid var(--border); padding-top:0.75rem;">
+          <label>Force Cloud Sync <small style="display:block;color:var(--text-muted);font-weight:normal;">Overrides cloud data with local data</small></label>
+          <button class="btn btn-primary btn-sm" id="force-sync-btn">Force Sync</button>
+        </div>
       </div>
 
       <!-- Password Change -->
@@ -348,6 +352,42 @@ const SettingsPage = (() => {
       Storage.saveUsers(users);
       Auth.logout();
       location.reload();
+    });
+
+    // Force Cloud Sync
+    document.getElementById('force-sync-btn')?.addEventListener('click', async () => {
+      const btn = document.getElementById('force-sync-btn');
+      const originalText = btn.textContent;
+      btn.textContent = 'Syncing...';
+      btn.disabled = true;
+
+      const username = Auth.currentUser();
+      const users = Storage.getUsers();
+      const localUser = users[username];
+
+      if (window.FirebaseModule && FirebaseModule.isAvailable() && localUser) {
+        try {
+          const db = FirebaseModule.getDB();
+          await db.ref('users/' + username).set(localUser);
+          btn.textContent = 'Success!';
+          btn.style.backgroundColor = 'var(--success)';
+          btn.style.color = '#fff';
+        } catch (err) {
+          btn.textContent = 'Failed';
+          btn.style.backgroundColor = 'var(--danger)';
+          console.error(err);
+        }
+      } else {
+        btn.textContent = 'Firebase Not Connected';
+        btn.style.backgroundColor = 'var(--danger)';
+      }
+
+      setTimeout(() => {
+        btn.textContent = originalText;
+        btn.disabled = false;
+        btn.style.backgroundColor = '';
+        btn.style.color = '';
+      }, 3000);
     });
 
     // Password change
