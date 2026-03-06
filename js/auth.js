@@ -43,8 +43,20 @@ const Auth = (() => {
                 if (snap.exists()) {
                     const dbUser = snap.val();
                     if (dbUser.password === hashPassword(password)) {
-                        users[username] = dbUser; // Sync cloud data locally
-                        Storage.saveUsers(users);
+                        const localUser = users[username];
+                        if (localUser) {
+                            const localXP = (localUser.data && localUser.data.xp) ? localUser.data.xp : 0;
+                            const cloudXP = (dbUser.data && dbUser.data.xp) ? dbUser.data.xp : 0;
+                            if (localXP > cloudXP) {
+                                await db.ref('users/' + username).set(localUser); // Overwrite cloud
+                            } else {
+                                users[username] = dbUser; // Sync cloud locally
+                                Storage.saveUsers(users);
+                            }
+                        } else {
+                            users[username] = dbUser; // New PC, pull from cloud
+                            Storage.saveUsers(users);
+                        }
                         Storage.setCurrentUser(username);
                         return { ok: true };
                     } else {
@@ -89,11 +101,22 @@ const Auth = (() => {
                     await db.ref('users/' + username).set(user);
                     console.log('Migrated local user to Firebase cloud.');
                 } else {
-                    // Pull latest from cloud just in case
+                    // Prevent empty cloud accounts from overwriting rich local accounts
                     const dbUser = snap.val();
                     if (dbUser.password === user.password) {
-                        users[username] = dbUser;
-                        Storage.saveUsers(users);
+                        const localXP = (user.data && user.data.xp) ? user.data.xp : 0;
+                        const cloudXP = (dbUser.data && dbUser.data.xp) ? dbUser.data.xp : 0;
+
+                        // If local has more XP, it means the cloud account is an empty/newer duplicate.
+                        // Overwrite the cloud with local rich data instead.
+                        if (localXP > cloudXP) {
+                            await db.ref('users/' + username).set(user);
+                            console.log('Local account had more XP, overwrote cloud account.');
+                        } else {
+                            users[username] = dbUser;
+                            Storage.saveUsers(users);
+                            console.log('Synced cloud data locally.');
+                        }
                     }
                 }
             } catch (err) { }
