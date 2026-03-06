@@ -34,65 +34,43 @@ const Auth = (() => {
 
     async function login(username, password) {
         const users = Storage.getUsers();
-        let cloudUser = null;
-        let cloudAuthOk = false;
-        let cloudChecked = false;
 
-        // 1. Try Firebase Cloud Check
+        // 1. NUCLEAR CLOUD OVERRIDE
         if (window.FirebaseModule && FirebaseModule.isAvailable()) {
-            cloudChecked = true;
             try {
                 const db = FirebaseModule.getDB();
                 const snap = await db.ref('users/' + username).once('value');
                 if (snap.exists()) {
-                    cloudUser = snap.val();
+                    const cloudUser = snap.val();
+                    // If the cloud password matches what the user typed...
                     if (cloudUser.password === hashPassword(password)) {
-                        cloudAuthOk = true;
+                        // The Cloud is KING. Immediately overwrite whatever local data exists.
+                        users[username] = cloudUser;
+                        Storage.saveUsers(users);
+                        Storage.setCurrentUser(username);
+                        return { ok: true };
                     }
+                    // If cloud exists but password fails, we fall through to local check.
                 }
             } catch (err) { console.error('Firebase login error:', err); }
         }
 
-        // 2. Local Fallback & Verification
+        // 2. LOCAL FALLBACK
         const localUser = users[username];
-        const localAuthOk = localUser && localUser.password === hashPassword(password);
-
-        if (!cloudAuthOk && !localAuthOk) {
-            return { ok: false, error: 'loginError' }; // True failure
+        if (!localUser || localUser.password !== hashPassword(password)) {
+            // Local failed too. Total failure.
+            return { ok: false, error: 'loginError' };
         }
 
-        // 3. Resolve State
-        if (cloudAuthOk && !localAuthOk) {
-            // New PC, pulling from Cloud
-            users[username] = cloudUser;
-            Storage.saveUsers(users);
-        } else if (!cloudAuthOk && localAuthOk) {
-            // Cloud password mismatched (hijacked) or cloud doesn't exist
-            // Since local is authentic, we should forcefully claim the cloud
-            if (cloudChecked) {
-                try {
-                    const db = FirebaseModule.getDB();
-                    await db.ref('users/' + username).set(localUser);
-                } catch (e) { }
-            }
-        } else if (cloudAuthOk && localAuthOk) {
-            // Both matched, compare XP to settle ties
-            const localXP = (localUser.data && localUser.data.xp) ? localUser.data.xp : 0;
-            const cloudXP = (cloudUser.data && cloudUser.data.xp) ? cloudUser.data.xp : 0;
-            if (localXP > cloudXP) {
-                if (cloudChecked) {
-                    try {
-                        const db = FirebaseModule.getDB();
-                        await db.ref('users/' + username).set(localUser);
-                    } catch (e) { }
-                }
-            } else {
-                users[username] = cloudUser;
-                Storage.saveUsers(users);
-            }
+        // 3. LOCAL SUCCESS -> CLAIM CLOUD
+        // If we reach here, Cloud either didn't exist or mismatched, but Local matched perfectly.
+        // Therefore, this local machine holds the true account. We forcefully claim the cloud.
+        if (window.FirebaseModule && FirebaseModule.isAvailable()) {
+            try {
+                const db = FirebaseModule.getDB();
+                await db.ref('users/' + username).set(localUser);
+            } catch (e) { }
         }
-
-
 
         Storage.setCurrentUser(username);
         return { ok: true };

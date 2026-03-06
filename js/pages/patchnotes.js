@@ -5,6 +5,13 @@ const PatchNotesPage = (() => {
       <div class="page-header"><h1>${I18n.t('patchNotesTitle')}</h1><p>${I18n.t('patchNotesSubtitle')}</p></div>
       <div class="patch-timeline">
         <div class="card patch-entry">
+          <div class="patch-version">v2.7.0 <span class="patch-date">— March 6, 2026</span></div>
+          <div><span class="patch-tag new">NEW</span> Nuclear Cloud Override Login</div>
+          <ul class="patch-list">
+            <li>🚀 Complete rewrite of login architecture to prioritize Cloud credentials. Logging into a valid cloud account now instantly purges local broken data, permanently solving the cross-device sync lockouts.</li>
+          </ul>
+        </div>
+        <div class="card patch-entry">
           <div class="patch-version">v2.6.0 <span class="patch-date">— March 6, 2026</span></div>
           <div><span class="patch-tag new">NEW</span> Force Cloud Sync</div>
           <ul class="patch-list">
