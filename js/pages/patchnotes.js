@@ -6,9 +6,10 @@ const PatchNotesPage = (() => {
       <div class="patch-timeline">
         <div class="card patch-entry">
           <div class="patch-version">v2.7.0 <span class="patch-date">— March 6, 2026</span></div>
-          <div><span class="patch-tag new">NEW</span> Nuclear Cloud Override Login</div>
+          <div><span class="patch-tag new">NEW</span> Nuclear Cloud Override Login & Diagnostics</div>
           <ul class="patch-list">
             <li>🚀 Complete rewrite of login architecture to prioritize Cloud credentials. Logging into a valid cloud account now instantly purges local broken data, permanently solving the cross-device sync lockouts.</li>
+            <li>⚠️ <b>Notice:</b> Many school Wi-Fi firewalls physically block Firebase Cloud servers. If your login diagnostically reports "No Cloud Configured", your school is blocking the app. Use the new <b>Download/Upload JSON</b> buttons in Settings on a USB drive instead to bypass the firewall!</li>
           </ul>
         </div>
         <div class="card patch-entry">
